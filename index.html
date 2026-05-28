@@ -4,1075 +4,738 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hileon Budget Tracker — Smart Finance for User</title>
-  <meta name="description" content="Hileon Budget Tracker is a powerful Android finance app for personal budgeting, business invoicing and project tracking. Works offline. 150+ currencies. 6 languages. Free on Google Play."/>
+  <meta name="description" content="Hileon Budget Tracker is a powerful Android finance app for personal budgeting, business invoicing and project tracking. Works offline. 150+ currencies. 14 languages. Free on Google Play."/>
   <meta property="og:title" content="Hileon Budget Tracker — Smart Finance for User"/>
   <meta property="og:description" content="Track expenses, create invoices, manage projects. Works offline. Built for Budgeting."/>
   <meta property="og:url" content="https://hileonapp.com"/>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+
   <style>
+    /* ═══ SYSTEM DESIGN TOKENS ═══ */
     :root {
-      --cream:        #F7F3EE;
-      --cream-dark:   #EDE8E0;
-      --cream-mid:    #F0EBE3;
-      --charcoal:     #2D2D2D;
-      --charcoal-mid: #3D3D3D;
-      --charcoal-lt:  #5A5A5A;
-      --orange:       #E8794A;
-      --orange-dark:  #C95E30;
-      --orange-xd:    #A84820;
-      --orange-light: #FDF1EA;
-      --orange-pale:  #FFF7F2;
-      --border:       #E0D8CF;
-      --border-dark:  #CEC6BC;
-      --white:        #FFFFFF;
-      --text:         #2D2D2D;
-      --text-mid:     #4A4240;
-      --text-muted:   #8A8078;
+      --bg-deep: #0B0E14;
+      --panel-glass: rgba(18, 22, 32, 0.7);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-pure: #FFFFFF;
+      --text-estate: #94A3B8;
+      --text-muted: #64748B;
+      
+      /* Dynamic Theme Variables dictated by state-machine */
+      --accent: 232, 121, 74;       /* Base Coral/Orange */
+      --accent-glow: rgba(232, 121, 74, 0.15);
+      
+      --font-display: 'Playfair Display', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --speed: 0.8s;
+      --easing: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    /* ═══ MASTER RESET & BASE ═══ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background-color: var(--bg-deep); color: var(--text-pure); font-family: var(--font-sans); }
+    body { min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-    body {
-      background: var(--cream);
-      color: var(--charcoal);
-      font-family: 'Sora', sans-serif;
-      font-weight: 400;
-      line-height: 1.7;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+    /* Performance-focused Grain Overlay */
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999;
     }
 
-    /* Grain texture overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.4;
+    /* ═══ FLUID BACKGROUND MATRIX ═══ */
+    #ambient-matrix {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      transition: filter var(--speed) var(--easing);
     }
 
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 28px; position: relative; }
+    .wrapper { position: relative; z-index: 2; max-width: 1300px; margin: 0 auto; padding: 0 40px; }
 
-    /* ══ NAV ══ */
+    /* ═══ NAVIGATION LAYER ═══ */
     nav {
-      position: sticky; top: 0; z-index: 200;
-      background: rgba(247,243,238,0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1.5px solid var(--border);
-      padding: 0;
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+      background: rgba(11, 14, 20, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--panel-border); transition: all var(--speed) var(--easing);
     }
-    .nav-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 68px;
-    }
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.5rem;
-      color: var(--charcoal);
-      text-decoration: none;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .nav-logo-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--orange);
-      display: inline-block;
-    }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      font-size: 0.875rem; font-weight: 600;
-      color: var(--text-muted); text-decoration: none;
-      transition: color .2s;
-      letter-spacing: 0.3px;
-    }
-    .nav-links a:hover { color: var(--orange); }
-    .nav-cta {
-      background: var(--charcoal);
-      color: var(--white);
-      padding: 10px 22px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 700;
-      transition: background .2s, transform .15s;
-      letter-spacing: 0.3px;
-    }
-    .nav-cta:hover { background: var(--orange); transform: translateY(-1px); }
+    .nav-container { display: flex; align-items: center; justify-content: space-between; height: 80px; max-width: 1300px; margin: 0 auto; padding: 0 40px; }
+    .logo { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--text-pure); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .logo-pulse { width: 10px; height: 10px; border-radius: 50%; background: rgb(var(--accent)); box-shadow: 0 0 15px rgb(var(--accent)); }
+    
+    .nav-menu { display: flex; gap: 40px; list-style: none; }
+    .nav-menu a { font-size: 0.9rem; font-weight: 600; color: var(--text-estate); text-decoration: none; transition: color 0.3s; letter-spacing: 0.5px; }
+    .nav-menu a:hover, .nav-menu .active a { color: rgb(var(--accent)); }
+    
+    .nav-action { background: var(--text-pure); color: var(--bg-deep); padding: 12px 26px; border-radius: 100px; text-decoration: none; font-size: 0.9rem; font-weight: 700; transition: all 0.3s var(--easing); }
+    .nav-action:hover { background: rgb(var(--accent)); color: var(--text-pure); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(var(--accent), 0.3); }
 
-    /* ══ HERO ══ */
-    .hero {
-      min-height: 92vh;
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 60px;
-      align-items: center;
-      padding: 100px 0 80px;
-      position: relative;
-    }
+    /* ═══ TYPOGRAPHY HERO ARCHITECTURE ═══ */
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; padding-top: 100px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(var(--accent), 0.1); border: 1px solid rgba(var(--accent), 0.3); padding: 6px 16px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; color: rgb(var(--accent)); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 30px; }
+    
+    h1 { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.2rem); line-height: 1.1; font-weight: 700; margin-bottom: 24px; letter-spacing: -1px; }
+    h1 em { font-style: italic; font-family: var(--font-display); color: rgb(var(--accent)); font-weight: 400; }
+    .hero-desc { font-size: 1.15rem; color: var(--text-estate); max-width: 620px; margin-bottom: 40px; line-height: 1.8; }
+    
+    .action-row { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 50px; }
+    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 36px; border-radius: 16px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.4s var(--easing); }
+    .btn-glow { background: rgb(var(--accent)); color: var(--text-pure); box-shadow: 0 15px 35px rgba(var(--accent), 0.25); }
+    .btn-glow:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(var(--accent), 0.4); }
+    .btn-outline { background: var(--panel-glass); color: var(--text-pure); border: 1px solid var(--panel-border); backdrop-filter: blur(10px); position: relative; }
+    .btn-outline:hover { border-color: rgb(var(--accent)); transform: translateY(-3px); }
+    .badge-soon { position: absolute; top: -10px; right: -10px; background: rgb(var(--accent)); font-size: 0.65rem; padding: 3px 8px; border-radius: 100px; font-weight: 800; text-transform: uppercase; }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      right: -120px; top: 50%;
-      transform: translateY(-50%);
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      border: 1.5px solid var(--border);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      right: -40px; top: 50%;
-      transform: translateY(-50%);
-      width: 440px; height: 440px;
-      border-radius: 50%;
-      border: 1.5px dashed var(--border-dark);
-      pointer-events: none;
-    }
+    .pill-cloud { display: flex; flex-wrap: wrap; gap: 10px; max-width: 650px; }
+    .pill { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); padding: 8px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 500; color: var(--text-estate); backdrop-filter: blur(5px); }
 
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--orange-light);
-      border: 1.5px solid rgba(232,121,74,0.25);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-size: 0.78rem; font-weight: 700;
-      color: var(--orange-dark);
-      margin-bottom: 28px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    /* ═══ LAYERED KINETIC INTERFACE MOCK ═══ */
+    .hero-visual-frame { position: relative; display: flex; justify-content: center; align-items: center; }
+    .glass-canvas-card {
+      background: var(--panel-glass); border: 1px solid rgba(255,255,255,0.12); border-radius: 32px; padding: 30px;
+      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); width: 100%; max-width: 420px;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.4); transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
+      transition: transform 0.5s var(--easing);
     }
-    .hero-eyebrow-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--orange);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%,100% { transform: scale(1); opacity: 1; }
-      50%      { transform: scale(1.4); opacity: 0.6; }
-    }
+    .glass-canvas-card:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+    
+    .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .meta-lbl { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700; }
+    .meta-time { background: rgba(var(--accent), 0.15); color: rgb(var(--accent)); font-size: 0.75rem; font-weight: 700; padding: 4px 14px; border-radius: 100px; }
+    .card-val { font-family: var(--font-display); font-size: 3rem; font-weight: 700; margin-bottom: 6px; }
+    .card-delta { font-size: 0.85rem; font-weight: 700; color: #10B981; margin-bottom: 30px; }
+    
+    .chart-pipeline { display: flex; align-items: flex-end; gap: 8px; height: 110px; margin-bottom: 30px; border-bottom: 1px solid var(--panel-border); padding-bottom: 5px; }
+    .pipe { flex: 1; background: rgba(255,255,255,0.05); border-radius: 6px 6px 0 0; transform-origin: bottom; transition: transform 1s var(--easing); }
+    .pipe.highlight { background: linear-gradient(to top, rgb(var(--accent)), rgba(var(--accent), 0.4)); }
+    
+    .stats-matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .matrix-box { background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border); padding: 16px; border-radius: 20px; }
+    .matrix-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; }
+    .matrix-val { font-family: var(--font-display); font-size: 1.4rem; color: var(--text-pure); }
 
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.8rem, 5.5vw, 5rem);
-      line-height: 1.08;
-      letter-spacing: -1px;
-      color: var(--charcoal);
-      margin-bottom: 24px;
+    .widget-float {
+      position: absolute; bottom: -20px; left: -40px; background: #000; border: 1px solid var(--panel-border);
+      padding: 16px 24px; border-radius: 24px; display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5); animation: geometricFloat 4s ease-in-out infinite;
     }
-    h1 em {
-      font-style: italic;
-      color: var(--orange);
-    }
+    @keyframes geometricFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-    .hero-sub {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      max-width: 500px;
-      margin-bottom: 40px;
-      line-height: 1.8;
-      font-weight: 400;
-    }
+    /* ═══ SITE SECTIONS SHARED ═══ */
+    section { padding: 140px 0; position: relative; }
+    .section-meta { font-size: 0.8rem; font-weight: 800; color: rgb(var(--accent)); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 16px; display: block; }
+    h2 { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; line-height: 1.15; margin-bottom: 24px; }
+    h2 em { font-style: italic; font-family: var(--font-display); color: rgb(var(--accent)); font-weight: 400; }
+    .section-desc { font-size: 1.15rem; color: var(--text-estate); max-width: 700px; line-height: 1.8; margin-bottom: 80px; }
 
-    .hero-btns {
-      display: flex; gap: 14px; flex-wrap: wrap;
-      margin-bottom: 48px;
+    /* ═══ ULTRA BENTO ARCHITECTURE ═══ */
+    .bento-vault { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .bento-node {
+      background: var(--panel-glass); border: 1px solid var(--panel-border); border-radius: 32px; padding: 40px;
+      transition: all 0.4s var(--easing); display: flex; flex-direction: column; position: relative; overflow: hidden;
     }
+    .bento-node:hover { border-color: rgba(var(--accent), 0.5); transform: translateY(-5px); box-shadow: 0 20px 40px var(--accent-glow); }
+    .bento-node.wide { grid-column: span 2; }
+    .node-icon { width: 60px; height: 60px; background: rgba(var(--accent), 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; color: rgb(var(--accent)); }
+    .bento-node h3 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 14px; font-weight: 400; }
+    .bento-node p { font-size: 0.95rem; color: var(--text-estate); line-height: 1.75; }
 
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--charcoal);
-      color: var(--white);
-      padding: 15px 28px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: background .2s, transform .15s, box-shadow .2s;
-      box-shadow: 0 4px 20px rgba(45,45,45,0.2);
-    }
-    .btn-primary svg { transition: transform .2s ease; }
-    .btn-primary:hover {
-      background: var(--orange);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(232,121,74,0.35);
-    }
-    .btn-primary:hover svg { transform: translateX(3px); }
+    /* ═══ INTERACTIVE STATE MODES ═══ */
+    .modes-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .mode-pod { background: var(--panel-glass); border: 1px solid var(--panel-border); border-radius: 32px; padding: 45px 36px; transition: all 0.4s var(--easing); }
+    .mode-pod:hover { border-color: rgba(var(--accent), 0.5); transform: translateY(-5px); }
+    .mode-pod h3 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 12px; font-weight: 400; }
+    .mode-info { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 30px; line-height: 1.7; }
+    .mode-spec { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .mode-spec li { font-size: 0.9rem; color: var(--text-estate); display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .mode-spec li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: rgb(var(--accent)); }
 
-    .btn-ios {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--white);
-      color: var(--charcoal);
-      padding: 15px 28px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      border: 1.5px solid var(--border-dark);
-      transition: border-color .2s, transform .15s;
-      position: relative;
+    /* ═══ POLYGLOT ENGINE SHIFT (14 LANGUAGES) ═══ */
+    .polyglot-deck { display: grid; grid-template-columns: repeat(7, 1fr); gap: 20px; }
+    .lang-node {
+      background: var(--panel-glass); border: 1px solid var(--panel-border); border-radius: 24px;
+      padding: 30px 15px; text-align: center; transition: all 0.3s var(--easing); cursor: pointer;
     }
-    .btn-ios:hover { border-color: var(--charcoal); transform: translateY(-2px); }
-    .btn-ios .soon-badge {
-      position: absolute;
-      top: -10px; right: -10px;
-      background: var(--orange);
-      color: white;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 100px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
+    .lang-node:hover, .lang-node.active-focus { border-color: rgb(var(--accent)); transform: scale(1.05); box-shadow: 0 15px 30px var(--accent-glow); }
+    .lang-globe { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+    .lang-title { font-size: 0.9rem; font-weight: 700; color: var(--text-pure); }
 
-    .hero-pills {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
-    .hero-pill {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 100px;
-      padding: 5px 14px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
+    /* ═══ OPTIMIZED PRICING ARCHITECTURE ═══ */
+    .tier-matrix { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .tier-card { background: var(--panel-glass); border: 1px solid var(--panel-border); border-radius: 32px; padding: 40px 28px; position: relative; transition: all 0.4s var(--easing); }
+    .tier-card:hover { transform: translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
+    .tier-card.premium { border: 2px solid rgb(var(--accent)); box-shadow: 0 20px 40px var(--accent-glow); }
+    .tier-tag { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: var(--text-estate); font-size: 0.7rem; font-weight: 800; padding: 6px 16px; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+    .tier-card.premium .tier-tag { background: rgb(var(--accent)); color: var(--text-pure); }
+    .tier-name { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 8px; font-weight: 400; }
+    .tier-cost { font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; color: rgb(var(--accent)); margin-bottom: 24px; }
+    .tier-lines { list-style: none; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--panel-border); padding-top: 24px; }
+    .tier-lines li { font-size: 0.88rem; color: var(--text-estate); display: flex; gap: 10px; align-items: flex-start; }
+    .tier-check { color: rgb(var(--accent)); font-weight: 800; }
 
-    /* ══ HERO VISUAL (LAYERED UPGRADE) ══ */
-    .hero-visual {
-      position: relative;
-      z-index: 1;
-    }
-    .app-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 32px 72px rgba(45,45,45,0.08), 0 4px 16px rgba(45,45,45,0.04);
-      position: relative;
-      overflow: hidden;
-      transform: perspective(1000px) rotateY(-4deg) rotateX(2deg);
-      transition: transform .4s ease;
-    }
-    .app-card:hover {
-      transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
-    }
-    .app-card::before {
-      content: '';
-      position: absolute;
-      top: -80px; right: -80px;
-      width: 240px; height: 240px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(232,121,74,0.08) 0%, transparent 70%);
-    }
+    /* ═══ TERMINAL BLOCK (DOWNLOAD & CONNECT) ═══ */
+    .terminal-section { background: #000; border: 1px solid var(--panel-border); padding: 100px 40px; border-radius: 48px; text-align: center; position: relative; overflow: hidden; margin-bottom: 80px; }
+    .terminal-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(var(--accent), 0.1) 0%, transparent 70%); pointer-events: none; }
+    .terminal-section h2 { margin-bottom: 16px; }
+    .terminal-section p { color: var(--text-estate); margin-bottom: 40px; font-size: 1.1rem; }
+    
+    .dock-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+    .dock-item { display: inline-flex; align-items: center; gap: 16px; padding: 18px 38px; border-radius: 20px; text-decoration: none; transition: all 0.3s var(--easing); }
+    .dock-google { background: rgb(var(--accent)); color: var(--text-pure); box-shadow: 0 15px 30px rgba(var(--accent), 0.3); }
+    .dock-google:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(var(--accent), 0.5); }
+    .dock-apple { background: rgba(255,255,255,0.04); color: var(--text-estate); border: 1px solid var(--panel-border); position: relative; }
+    .dock-apple:hover { border-color: var(--text-pure); color: var(--text-pure); transform: translateY(-3px); }
 
-    .app-card-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 20px;
-    }
-    .app-card-title { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
-    .app-card-period {
-      background: var(--orange-light);
-      color: var(--orange-dark);
-      font-size: 0.72rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 100px;
-      border: 1px solid rgba(232,121,74,0.2);
-    }
+    .social-cluster { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 60px; }
+    .social-node { display: inline-flex; align-items: center; gap: 10px; background: var(--panel-glass); border: 1px solid var(--panel-border); padding: 14px 28px; border-radius: 16px; text-decoration: none; color: var(--text-estate); font-size: 0.9rem; font-weight: 600; transition: all 0.3s; }
+    .social-node:hover { border-color: rgb(var(--accent)); color: var(--text-pure); transform: translateY(-2px); }
+    .support-terminal { margin-top: 40px; font-size: 0.95rem; color: var(--text-muted); }
+    .support-terminal a { color: rgb(var(--accent)); text-decoration: none; font-weight: 600; }
 
-    .app-amount { font-family: 'DM Serif Display', serif; font-size: 2.6rem; color: var(--charcoal); margin-bottom: 4px; }
-    .app-change { font-size: 0.8rem; font-weight: 700; color: #22A06B; margin-bottom: 24px; }
+    /* ═══ FOOTER ARCHITECTURE ═══ */
+    footer { border-top: 1px solid var(--panel-border); padding: 50px 0; background: #07090D; }
+    .footer-core { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.5rem; color: var(--text-pure); text-decoration: none; }
+    .footer-rights { font-size: 0.85rem; color: var(--text-muted); }
+    .footer-nav { display: flex; gap: 30px; }
+    .footer-nav a { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .footer-nav a:hover { color: rgb(var(--accent)); }
 
-    .bars-wrap { display: flex; align-items: flex-end; gap: 7px; height: 90px; margin-bottom: 10px; }
-    .bar {
-      flex: 1; border-radius: 6px 6px 0 0;
-      background: var(--cream-dark);
-      transform-origin: bottom;
+    /* ═══ RESPONSIVE RENDER MATRIX ═══ */
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding-top: 140px; }
+      .hero-desc { margin: 0 auto 40px; }
+      .action-row { justify-content: center; }
+      .pill-cloud { justify-content: center; margin: 0 auto; }
+      .hero-visual-frame { margin-top: 60px; }
+      .bento-vault { grid-template-columns: 1fr 1fr; }
+      .bento-node.wide { grid-column: span 2; }
+      .polyglot-deck { grid-template-columns: repeat(4, 1fr); }
+      .tier-matrix { grid-template-columns: repeat(2, 1fr); }
     }
-    .bar.hi { background: linear-gradient(180deg, var(--orange), var(--orange-dark)); }
-    .bar:nth-child(1){height:40%;}
-    .bar:nth-child(2){height:62%;}
-    .bar:nth-child(3){height:48%;}
-    .bar:nth-child(4){height:76%;}
-    .bar:nth-child(5){height:55%;}
-    .bar:nth-child(6){height:92%;}
-    .bar:nth-child(7){height:70%;}
-    .bar-labels { display: flex; gap: 7px; margin-bottom: 20px; }
-    .bar-labels span { flex:1; font-size: 0.65rem; color: var(--text-muted); text-align: center; font-weight: 600; }
-
-    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat-box {
-      background: var(--cream);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 16px;
+    @media (max-width: 780px) {
+      .nav-menu { display: none; }
+      .bento-vault { grid-template-columns: 1fr; }
+      .bento-node.wide { grid-column: span 1; }
+      .modes-gallery { grid-template-columns: 1fr; }
+      .polyglot-deck { grid-template-columns: repeat(3, 1fr); }
+      .tier-matrix { grid-template-columns: 1fr; }
+      .wrapper { padding: 0 20px; }
     }
-    .stat-box-label { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .stat-box-val { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--orange); }
-
-    .float-badge {
-      position: absolute;
-      bottom: -15px; left: -25px;
-      background: var(--charcoal);
-      color: white;
-      border-radius: 16px;
-      padding: 14px 18px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      box-shadow: 0 12px 32px rgba(45,45,45,0.2);
-      display: flex; align-items: center; gap: 10px;
-      animation: floatUp 3s ease-in-out infinite;
-      z-index: 10;
-    }
-    .float-badge-icon {
-      width: 32px; height: 32px; border-radius: 10px;
-      background: var(--orange);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    @keyframes floatUp {
-      0%,100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-8px) scale(1.02); }
-    }
-
-    /* ══ SECTION SHARED ══ */
-    section { padding: 120px 0; }
-    .section-eyebrow {
-      display: inline-block;
-      font-size: 0.75rem; font-weight: 800;
-      color: var(--orange);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-    }
-    h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-      line-height: 1.15;
-      letter-spacing: -0.5px;
-      color: var(--charcoal);
-      margin-bottom: 20px;
-    }
-    h2 em { font-style: italic; color: var(--orange); }
-    .section-sub {
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      max-width: 580px;
-      line-height: 1.8;
-      margin-bottom: 64px;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1.5px solid var(--border);
-    }
-
-    /* ══ MODERN BENTO GRID UPGRADE ══ */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .bento-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 24px;
-      padding: 36px;
-      transition: border-color .3s, transform .3s, box-shadow .3s;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-    .bento-card:hover {
-      border-color: var(--orange);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(232,121,74,0.06);
-    }
-    .bento-card.span-2 {
-      grid-column: span 2;
-    }
-    .bento-icon {
-      width: 52px; height: 52px;
-      background: var(--orange-light);
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 24px;
-    }
-    .bento-card h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.4rem;
-      color: var(--charcoal);
-      margin-bottom: 12px;
-      font-weight: 400;
-    }
-    .bento-card p {
-      font-size: 0.92rem;
-      color: var(--text-mid);
-      line-height: 1.75;
-    }
-
-    /* ══ MODES ══ */
-    .modes-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 24px;
-    }
-    .mode-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 24px;
-      padding: 36px 32px;
-      transition: box-shadow .25s, transform .25s, border-color .25s;
-    }
-    .mode-card:hover {
-      box-shadow: 0 20px 48px rgba(45,45,45,0.08);
-      transform: translateY(-4px);
-      border-color: var(--orange);
-    }
-    .mode-card-icon {
-      width: 52px; height: 52px;
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 24px;
-    }
-    .mode-card h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.5rem;
-      color: var(--charcoal);
-      margin-bottom: 10px;
-      font-weight: 400;
-    }
-    .mode-card .mode-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      line-height: 1.7;
-    }
-    .mode-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .mode-list li {
-      font-size: 0.88rem;
-      color: var(--text-mid);
-      display: flex; gap: 10px; align-items: flex-start;
-      padding: 6px 0;
-      border-bottom: 1px solid var(--cream-dark);
-    }
-    .mode-list li:last-child { border-bottom: none; }
-    .mode-list li::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--orange);
-      flex-shrink: 0;
-      margin-top: 8px;
-    }
-
-    /* ══ LANGUAGES ══ */
-    .lang-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 16px;
-    }
-    .lang-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 18px;
-      padding: 24px 14px;
-      text-align: center;
-      transition: border-color .2s, transform .2s, box-shadow .2s;
-      cursor: default;
-    }
-    .lang-card:hover {
-      border-color: var(--orange);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(45,45,45,0.04);
-    }
-    .lang-flag { font-size: 2.2rem; margin-bottom: 10px; }
-    .lang-name { font-size: 0.85rem; font-weight: 600; color: var(--text-mid); }
-
-    /* ══ HARMONIZED PRICING UPGRADE ══ */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
-    .price-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 24px;
-      padding: 32px 26px;
-      transition: box-shadow .25s, transform .25s, border-color .25s;
-      position: relative;
-    }
-    .price-card:hover {
-      box-shadow: 0 20px 48px rgba(45,45,45,0.08);
-      transform: translateY(-4px);
-    }
-    /* Premium Highlighting instead of contrasting pitch black */
-    .price-card.featured {
-      border: 2px solid var(--orange);
-      box-shadow: 0 16px 40px rgba(232,121,74,0.08);
-    }
-    .price-card.featured:hover {
-      box-shadow: 0 24px 48px rgba(232,121,74,0.14);
-    }
-    .price-badge {
-      display: inline-block;
-      background: var(--cream);
-      color: var(--text-muted);
-      font-size: 0.7rem; font-weight: 800;
-      padding: 4px 12px; border-radius: 100px;
-      text-transform: uppercase; letter-spacing: 0.5px;
-      margin-bottom: 18px;
-      border: 1px solid var(--border);
-    }
-    .price-card.featured .price-badge {
-      background: var(--orange);
-      color: var(--white);
-      border-color: var(--orange);
-    }
-    .price-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.4rem; font-weight: 400;
-      color: var(--charcoal);
-      margin-bottom: 6px;
-    }
-    .price-amount {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.4rem;
-      color: var(--orange);
-      margin-bottom: 4px;
-    }
-    .price-freq { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
-    .price-divider { border: none; border-top: 1.5px solid var(--border); margin-bottom: 20px; }
-    .price-features { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-    .price-features li {
-      font-size: 0.85rem; color: var(--text-mid);
-      display: flex; gap: 9px; align-items: flex-start;
-    }
-    .price-check { color: var(--orange); flex-shrink: 0; margin-top: 2px; font-weight: 800; font-size: 0.8rem; }
-
-    /* ══ DOWNLOAD CTA ══ */
-    .download-section {
-      background: var(--charcoal);
-      padding: 120px 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      border-radius: 40px;
-      margin-bottom: 60px;
-    }
-    .download-section::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      width: 700px; height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(232,121,74,0.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .download-section h2 { color: var(--white); margin-bottom: 16px; }
-    .download-section p { color: #A69E9B; margin-bottom: 44px; font-size: 1.05rem; }
-    .download-btns {
-      display: flex; gap: 16px;
-      justify-content: center; flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-    .dl-btn {
-      display: inline-flex; align-items: center; gap: 14px;
-      padding: 16px 32px;
-      border-radius: 16px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .dl-btn:hover { transform: translateY(-3px); }
-    .dl-btn-android {
-      background: var(--orange);
-      color: var(--white);
-      box-shadow: 0 4px 24px rgba(232,121,74,0.4);
-    }
-    .dl-btn-android:hover { box-shadow: 0 10px 36px rgba(232,121,74,0.5); }
-    .dl-btn-ios {
-      background: rgba(255,255,255,0.08);
-      color: #9A9290;
-      border: 1.5px solid rgba(255,255,255,0.12);
-      position: relative;
-    }
-    .dl-btn-ios .soon {
-      position: absolute;
-      top: -12px; right: -12px;
-      background: var(--orange);
-      color: white;
-      font-size: 0.62rem; font-weight: 800;
-      padding: 3px 9px; border-radius: 100px;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-    }
-    .download-note { font-size: 0.85rem; color: #6E6663; }
-
-    /* ══ SOCIAL ══ */
-    .social-section { padding: 100px 0 60px; }
-    .social-grid {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      margin-top: 36px;
-    }
-    .social-link {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 24px;
-      text-decoration: none;
-      font-size: 0.9rem; font-weight: 600;
-      color: var(--text-mid);
-      transition: border-color .2s, transform .15s, color .2s;
-    }
-    .social-link:hover {
-      border-color: var(--orange);
-      color: var(--orange);
-      transform: translateY(-2px);
-    }
-    .contact-line {
-      margin-top: 36px;
-      font-size: 0.95rem;
-      color: var(--text-muted);
-    }
-    .contact-line a {
-      color: var(--orange);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    /* ══ FOOTER ══ */
-    footer {
-      background: var(--charcoal-mid);
-      padding: 40px 0;
-    }
-    .footer-inner {
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.3rem;
-      color: var(--white);
-      text-decoration: none;
-    }
-    .footer-copy { font-size: 0.85rem; color: #7E7673; }
-    .footer-links { display: flex; gap: 28px; }
-    .footer-links a {
-      font-size: 0.85rem; color: #7E7673;
-      text-decoration: none; transition: color .2s;
-    }
-    .footer-links a:hover { color: var(--orange); }
-
-    /* ══ ANIMATIONS ══ */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-content > * { animation: fadeUp .6s ease both; opacity: 0; }
-    .hero-content > *:nth-child(1) { animation-delay: .1s; }
-    .hero-content > *:nth-child(2) { animation-delay: .2s; }
-    .hero-content > *:nth-child(3) { animation-delay: .3s; }
-    .hero-content > *:nth-child(4) { animation-delay: .4s; }
-    .hero-content > *:nth-child(5) { animation-delay: .5s; }
-    .hero-visual { animation: fadeUp .8s ease .3s both; }
-
-    /* ══ RESPONSIVE ══ */
-    @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; padding: 60px 0 40px; min-height: auto; }
-      .hero::before, .hero::after { display: none; }
-      .hero-visual { display: none; }
-      .bento-grid { grid-template-columns: 1fr 1fr; }
-      .bento-card.span-2 { grid-column: span 2; }
-      .modes-grid { grid-template-columns: 1fr; }
-      .lang-grid { grid-template-columns: repeat(3, 1fr); }
-      .pricing-grid { grid-template-columns: 1fr 1fr; }
-      .nav-links { display: none; }
-      h1 { font-size: 3rem; }
-    }
-    @media (max-width: 640px) {
-      .bento-grid { grid-template-columns: 1fr; }
-      .bento-card.span-2 { grid-column: span 1; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .lang-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-btns { flex-direction: column; }
-      .btn-primary, .btn-ios { width: 100%; justify-content: center; }
+    @media (max-width: 480px) {
+      .polyglot-deck { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
-<nav>
-  <div class="container">
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <span class="nav-logo-dot"></span>
-        Hileon
-      </a>
-      <ul class="nav-links">
+  <!-- FLUID KINETIC SYSTEM GRAPHIC -->
+  <canvas id="ambient-matrix"></canvas>
+
+  <!-- CONTROL LAYER HEADER -->
+  <nav id="master-nav">
+    <div class="nav-container">
+      <a href="#" class="logo"><span class="logo-pulse"></span>Hileon</a>
+      <ul class="nav-menu">
         <li><a href="#features">Features</a></li>
         <li><a href="#modes">Modes</a></li>
+        <li><a href="#languages">Languages</a></li>
         <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#connect">Connect</a></li>
       </ul>
-      <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" class="nav-cta">Get the App</a>
+      <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" class="nav-action">Install App</a>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<div class="container">
-  <div class="hero">
-    <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-dot"></span>
-        Built for Everyone · Available Worldwide
-      </div>
-      <h1>Your money.<br><em>Your language.</em><br>Your control.</h1>
-      <p class="hero-sub">Hileon Budget Tracker is a powerful Android finance app for personal budgeting, business invoicing and project cost tracking. Works 100% offline. No account needed.</p>
-      <div class="hero-btns">
-        <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" class="btn-primary">
-          Download on Google Play
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-        <a href="#" class="btn-ios">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 00-3.16 19.5c.5.08.68-.22.68-.48v-1.7C6.73 19.91 6.14 18 6.14 18A2.69 2.69 0 005 16.5c-.91-.62.07-.61.07-.61a2.13 2.13 0 011.55 1.05 2.16 2.16 0 002.95.84 2.16 2.16 0 01.64-1.35C7.79 16.24 5.9 15.56 5.9 12.37a3.32 3.32 0 01.88-2.3 3.08 3.08 0 01.08-2.27s.72-.23 2.36.88a8.13 8.13 0 014.3 0c1.64-1.11 2.35-.88 2.35-.88a3.06 3.06 0 01.09 2.27 3.32 3.32 0 01.88 2.3c0 3.2-1.95 3.87-3.8 4.08a2.42 2.42 0 01.69 1.88v2.79c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
-          iOS App
-          <span class="soon-badge">Coming Soon</span>
-        </a>
-      </div>
-      <div class="hero-pills">
-        <span class="hero-pill">100% Offline</span>
-        <span class="hero-pill">150+ Currencies</span>
-        <span class="hero-pill">6 Languages</span>
-        <span class="hero-pill">No Account Required</span>
-        <span class="hero-pill">Personal + Project + Business</span>
-      </div>
-    </div>
-
-    <div class="hero-visual">
-      <div class="app-card">
-        <div class="app-card-header">
-          <div class="app-card-title">Monthly Overview</div>
-          <div class="app-card-period">April 2026</div>
-        </div>
-        <div class="app-amount">$1,240.00</div>
-        <div class="app-change">↑ 12% vs last month</div>
-        <div class="bars-wrap">
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <div class="bar hi"></div>
-          <div class="bar"></div>
-        </div>
-        <div class="bar-labels">
-          <span>Oct</span><span>Nov</span><span>Dec</span>
-          <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
-        </div>
-        <div class="stat-row">
-          <div class="stat-box">
-            <div class="stat-box-label">Saved</div>
-            <div class="stat-box-val">$320</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-box-label">Budget left</div>
-            <div class="stat-box-val">68%</div>
-          </div>
-        </div>
-        <div class="float-badge">
-          <div class="float-badge-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <div style="font-size:0.72rem;color:#9A9290;font-weight:600;">Invoice paid</div>
-            <div style="font-size:0.85rem;font-weight:700;">+$450.00</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<hr class="divider"/>
-
-<section id="features">
-  <div class="container">
-    <div class="section-eyebrow">Features</div>
-    <h2>Everything to <em>manage your money</em></h2>
-    <p class="section-sub">From daily expense tracking to professional invoicing and project budgeting — Hileon handles it all in one app, completely offline.</p>
+  <div class="wrapper">
     
-    <div class="bento-grid">
-      <div class="bento-card span-2">
-        <div class="bento-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+    <!-- ═══ HERO ENTRY NODE ═══ -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="logo-pulse" style="width:6px;height:6px;margin-right:2px;"></span>
+          Global Financial Freedom · Local Sovereignty
         </div>
-        <h3>Works 100% Offline</h3>
-        <p>All data is securely stored directly on your physical device. No Wi-Fi, no mobile data, no cloud dependencies. Your personal financial layout works seamlessly when cellular networks or internet connections drop out.</p>
+        <h1>Your money.<br><em>Your language.</em><br>Your control.</h1>
+        <p class="hero-desc">Hileon Budget Tracker is a precision-engineered personal budgeting, commercial invoicing, and strategic project cost engine. Functions 100% offline. Zero account prerequisites.</p>
+        
+        <div class="action-row">
+          <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" class="btn btn-glow">
+            Download on Google Play
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#" class="btn btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 00-3.16 19.5c.5.08.68-.22.68-.48v-1.7C6.73 19.91 6.14 18 6.14 18A2.69 2.69 0 005 16.5c-.91-.62.07-.61.07-.61a2.13 2.13 0 011.55 1.05 2.16 2.16 0 002.95.84 2.16 2.16 0 01.64-1.35C7.79 16.24 5.9 15.56 5.9 12.37a3.32 3.32 0 01.88-2.3 3.08 3.08 0 01.08-2.27s.72-.23 2.36.88a8.13 8.13 0 014.3 0c1.64-1.11 2.35-.88 2.35-.88a3.06 3.06 0 01.09 2.27 3.32 3.32 0 01.88 2.3c0 3.2-1.95 3.87-3.8 4.08a2.42 2.42 0 01.69 1.88v2.79c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
+            iOS Deployment
+            <span class="badge-soon">Soon</span>
+          </a>
+        </div>
+
+        <div class="pill-cloud">
+          <span class="pill">100% Device Native</span>
+          <span class="pill">150+ Currency Matrices</span>
+          <span class="pill">14 Native Languages</span>
+          <span class="pill">Zero Authentication Forced</span>
+          <span class="pill">Unified Trinity Mode Architecture</span>
+        </div>
       </div>
+
+      <div class="hero-visual-frame">
+        <div class="glass-canvas-card">
+          <div class="card-meta">
+            <div class="meta-lbl">Live Core Analytics</div>
+            <div class="meta-time">Q2 Overview</div>
+          </div>
+          <div class="card-val">$1,240.00</div>
+          <div class="card-delta">↑ 12% Variance Dynamic</div>
+          
+          <div class="chart-pipeline">
+            <div class="pipe" style="height: 35%"></div>
+            <div class="pipe" style="height: 55%"></div>
+            <div class="pipe" style="height: 40%"></div>
+            <div class="pipe" style="height: 70%"></div>
+            <div class="pipe" style="height: 50%"></div>
+            <div class="pipe highlight" style="height: 95%"></div>
+            <div class="pipe" style="height: 65%"></div>
+          </div>
+
+          <div class="stats-matrix">
+            <div class="matrix-box">
+              <div class="matrix-lbl">Capital Retained</div>
+              <div class="matrix-val">$320</div>
+            </div>
+            <div class="matrix-box">
+              <div class="matrix-lbl">Threshold Delta</div>
+              <div class="matrix-val">68%</div>
+            </div>
+          </div>
+
+          <div class="widget-float">
+            <div class="logo-pulse" style="background:#10B981;box-shadow:0 0 10px #10B981;"></div>
+            <div>
+              <div style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Invoice Executed</div>
+              <div style="font-size:0.95rem; font-weight:800; color:#10B981;">+$450.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FEATURES NODE ═══ -->
+    <section id="features">
+      <span class="section-meta">System Capacities</span>
+      <h2>Omnipotent <em>financial engineering</em></h2>
+      <p class="section-desc">From singular daily transaction pipelines to sophisticated commercial multi-tier billing and compound project thresholds—Hileon manages execution entirely micro-locally.</p>
+
+      <div class="bento-vault">
+        <div class="bento-node wide">
+          <div class="node-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+          </div>
+          <h3>Autonomous Offline Protocol</h3>
+          <p>Complete dataset encapsulation entirely inside your physical storage node. No network requirements, no external tracking parameters, no dependency trees. Absolute data sovereignty running effortlessly through global dead zones.</p>
+        </div>
+
+        <div class="bento-node">
+          <div class="node-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <h3>Dynamic Data Visualisation</h3>
+          <p>High-contrast metric analytics and categorical segmentation configurations charting exact capital trends broken down by customizable timelines.</p>
+        </div>
+
+        <div class="bento-node">
+          <div class="node-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Algorithmic Budget Caps</h3>
+          <p>Configure rigorous constraints across categorical nodes with responsive ring dynamics tracking exactly how you balance margins.</p>
+        </div>
+
+        <div class="bento-node wide">
+          <div class="node-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3>Enterprise-Grade Invoicing Engine</h3>
+          <p>Generate, monitor, and export multi-line itemized corporate invoices. Featuring modular taxation layers, structured transaction reference protocols, and immediate system execution to native vector document formats.</p>
+        </div>
+
+        <div class="bento-node">
+          <div class="node-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <h3>Global Currency Matrix</h3>
+          <p>Comprehensive index tracking over 150+ currencies—including complete native parsing configurations for ZWL, ZAR, KES, MZN, and ETB.</p>
+        </div>
+
+        <div class="bento-node">
+          <div class="node-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>Advanced P&amp;L Architecture</h3>
+          <p>Unlocks instant overviews of corporate net parameters, micro-business yields, corporate tax reserves, and continuous balance sheets.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ MODES ARCHITECTURE NODE ═══ -->
+    <section id="modes">
+      <span class="section-meta">Operational Trinity</span>
+      <h2>Modular <em>execution profiles</em></h2>
+      <p class="section-desc">Shift context instantaneously. Hileon maintains complete structural isolation between your personal ledger, enterprise transactions, and target milestone budgets.</p>
       
-      <div class="bento-card">
-        <div class="bento-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <div class="modes-gallery">
+        <div class="mode-pod" data-theme="coral">
+          <div class="node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <h3>Personal Profile</h3>
+          <p class="mode-info">Isolate daily micro-transactions from commercial entities. Trace individual capital distribution down to the singular dollar, rand, or shilling.</p>
+          <ul class="mode-spec">
+            <li>8 Native Categorization Triggers</li>
+            <li>Dynamic Capital Boundary Visualization</li>
+            <li>Extended 12-Month Projections Map</li>
+            <li>Multi-Period Savings Rate Tracking</li>
+            <li>Impenetrable Ledger Logs</li>
+          </ul>
         </div>
-        <h3>Spending Charts</h3>
-        <p>Beautiful area charts and donut breakdowns showing exactly where your money goes — by day, month, quarter or year.</p>
-      </div>
 
-      <div class="bento-card">
-        <div class="bento-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div class="mode-pod" data-theme="magenta">
+          <div class="node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
+          <h3>Enterprise Profile</h3>
+          <p class="mode-info">Commercial framework configuration handling asset ledgers, client invoices, precise profit analysis, and deep profiling mechanics.</p>
+          <ul class="mode-spec">
+            <li>Scalable Billing Generation Matrix</li>
+            <li>Unified Inventory Asset Index</li>
+            <li>Automated Fiscal Tax Calculations</li>
+            <li>Isolated Multi-Business Profiles</li>
+            <li>Universal CSV Import/Export Structs</li>
+          </ul>
         </div>
-        <h3>Budget Tracking</h3>
-        <p>Set monthly budgets per category. Ring indicators and comparison badges show exactly how you're tracking.</p>
-      </div>
 
-      <div class="bento-card span-2">
-        <div class="bento-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <div class="mode-pod" data-theme="cyan">
+          <div class="node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <h3>Project Profile</h3>
+          <p class="mode-info">Isolate milestone capital investments, phase allocations, asset deployment targets, and funding contributions across micro-ventures.</p>
+          <ul class="mode-spec">
+            <li>Dynamic Phase Milestone Triggers</li>
+            <li>Modular Stage Constraints Map</li>
+            <li>Granular Capital Source Attribution</li>
+            <li>Target Threshold Trackers</li>
+            <li>Direct Commercial Cost Ingestion</li>
+          </ul>
         </div>
-        <h3>Professional Invoicing Suite</h3>
-        <p>Create, manage, and dispatch comprehensive client invoices with automated document numbering fields, customizable line items, dynamic local sales tax calculations, and lightning-fast local PDF file export systems.</p>
       </div>
+    </section>
 
-      <div class="bento-card">
-        <div class="bento-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-        </div>
-        <h3>150+ Currencies</h3>
-        <p>Full support for ZWL, ZAR, KES, MZN, ETB and 145+ more. Search and switch currencies instantly in settings.</p>
+    <!-- ═══ RE-ENGINEERED POLYGLOT HUB (14 LANGUAGES) ═══ -->
+    <section id="languages">
+      <span class="section-meta">Global Ingestion Matrix</span>
+      <h2>Sovereignty in <em>fourteen tongues</em></h2>
+      <p class="section-desc">Financial clarity demands native alignment. Click any language node below to morph the environmental visualization spectrum across Hileon's foundational dialects[span_1](start_span)[span_1](end_span).</p>
+      
+      <div class="polyglot-deck">
+        <div class="lang-node active-focus" data-lang="1" data-v="0.6"><span class="lang-globe">🇬🇧</span><span class="lang-title">English</span></div>
+        <div class="lang-node" data-lang="2" data-v="1.5"><span class="lang-globe">🇯🇵</span><span class="lang-title">日本語</span></div>
+        <div class="lang-node" data-lang="3" data-v="2.2"><span class="lang-globe">🇩🇪</span><span class="lang-title">Deutsch</span></div>
+        <div class="lang-node" data-lang="4" data-v="0.9"><span class="lang-globe">🇫🇷</span><span class="lang-title">Français</span></div>
+        <div class="lang-node" data-lang="5" data-v="1.8"><span class="lang-globe">🇵🇹</span><span class="lang-title">Português</span></div>
+        <div class="lang-node" data-lang="6" data-v="0.4"><span class="lang-globe">🇰🇪</span><span class="lang-title">Kiswahili</span></div>
+        <div class="lang-node" data-lang="7" data-v="1.3"><span class="lang-globe">🇪🇸</span><span class="lang-title">Español</span></div>
+        <div class="lang-node" data-lang="8" data-v="2.0"><span class="lang-globe">🇸🇦</span><span class="lang-title">العربية</span></div>
+        <div class="lang-node" data-lang="9" data-v="1.1"><span class="lang-globe">🇵🇰</span><span class="lang-title">اردو</span></div>
+        <div class="lang-node" data-lang="10" data-v="2.5"><span class="lang-globe">🇮🇳</span><span class="lang-title">हिन्दी</span></div>
+        <div class="lang-node" data-lang="11" data-v="BD"><span class="lang-globe">🇧🇩</span><span class="lang-title">বাংলা</span></div>
+        <div class="lang-node" data-lang="12" data-v="ID"><span class="lang-globe">🇮🇩</span><span class="lang-title">Indonesia</span></div>
+        <div class="lang-node" data-lang="13" data-v="RU"><span class="lang-globe">🇷🇺</span><span class="lang-title">Русский</span></div>
+        <div class="lang-node" data-lang="14" data-v="ET"><span class="lang-globe">🇪🇹</span><span class="lang-title">አማርኛ</span></div>
       </div>
+    </section>
 
-      <div class="bento-card">
-        <div class="bento-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <!-- ═══ PRICING ARCHITECTURE NODE ═══ -->
+    <section id="pricing">
+      <span class="section-meta">Transparent Parameters</span>
+      <h2>Uncompromising <em>pricing models</em></h2>
+      <p class="section-desc">Localized currency translation processed instantly at secure device ingestion points via Google Play checkout architectures. Absolute structural transparency.</p>
+
+      <div class="tier-matrix">
+        <div class="tier-card">
+          <div class="tier-tag">Base Ledger</div>
+          <div class="tier-name">Free Tier</div>
+          <div class="tier-cost">$0</div>
+          <div class="tier-meta" style="margin-bottom:20px;">Infinite Longevity</div>
+          <ul class="tier-lines">
+            <li><span class="tier-check">✓</span> Core Capital Tracking</li>
+            <li><span class="tier-check">✓</span> Metric Visualization Graphs</li>
+            <li><span class="tier-check">✓</span> 150+ Currencies &amp; 14 Languages[span_2](start_span)[span_2](end_span)</li>
+            <li><span class="tier-check">✓</span> 50 Business Rows / Month</li>
+            <li><span class="tier-check">✓</span> 100% Offline Integrity</li>
+          </ul>
         </div>
-        <h3>P&amp;L Tracker</h3>
-        <p>Monitor gross profit, net profit, VAT reserve and corporate tax — everything a small business needs.</p>
+
+        <div class="tier-card premium">
+          <div class="tier-tag">Intermediate</div>
+          <div class="tier-name">Profile Pro</div>
+          <div class="tier-cost">Local Rate</div>
+          <div class="tier-meta" style="margin-bottom:20px;">Via Play Store Processing</div>
+          <ul class="tier-lines">
+            <li><span class="tier-check">✓</span> Inclusive of Base Tier</li>
+            <li><span class="tier-check">✓</span> Advanced Insight Module</li>
+            <li><span class="tier-check">✓</span> Boundary Threshold Alarms</li>
+            <li><span class="tier-check">✓</span> Structural CSV Data Transport</li>
+            <li><span class="tier-check">✓</span> 5 Active Project Slots</li>
+          </ul>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-tag">Commercial</div>
+          <div class="tier-name">Business Pro</div>
+          <div class="tier-cost">Local Rate</div>
+          <div class="tier-meta" style="margin-bottom:20px;">Via Play Store Processing</div>
+          <ul class="tier-lines">
+            <li><span class="tier-check">✓</span> 300 Business Rows / Month</li>
+            <li><span class="tier-check">✓</span> End-to-End Invoicing Core</li>
+            <li><span class="tier-check">✓</span> Asset Inventory Trackers</li>
+            <li><span class="tier-check">✓</span> Corporate Insights Node</li>
+            <li><span class="tier-check">✓</span> 3 Distinct Business Profiles</li>
+          </ul>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-tag">Omnipotent</div>
+          <div class="tier-name">Ultimate Protocol</div>
+          <div class="tier-cost">Local Rate</div>
+          <div class="tier-meta" style="margin-bottom:20px;">Via Play Store Processing</div>
+          <ul class="tier-lines">
+            <li><span class="tier-check">✓</span> Total Access Extrapolation</li>
+            <li><span class="tier-check">✓</span> Boundless Business Rows</li>
+            <li><span class="tier-check">✓</span> Boundless Business Structures</li>
+            <li><span class="tier-check">✓</span> Unconstrained Project Pools</li>
+            <li><span class="tier-check">✓</span> Legacy Upgrades Assured</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ DOWNLOAD & SOCIAL CONNECTION TERMINAL ═══ -->
+    <div id="download">
+      <div class="terminal-section">
+        <h2>Secure the ecosystem today</h2>
+        <p>Instantly deployable on Android. No backend accounts forced.<br>Operational security directly from initial asset instantiation.</p>
+        
+        <div class="dock-buttons">
+          <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" class="dock-item dock-google">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
+            <div style="text-align:left">
+              <div style="font-size:0.65rem; opacity:0.8; text-transform:uppercase; font-weight:700;">Deploy System from</div>
+              <div style="font-size:1.1rem; font-weight:800;">Google Play</div>
+            </div>
+          </a>
+          <a href="#" class="dock-item dock-apple">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 00-3.16 19.5c.5.08.68-.22.68-.48v-1.7C6.73 19.91 6.14 18 6.14 18A2.69 2.69 0 005 16.5c-.91-.62.07-.61.07-.61a2.13 2.13 0 011.55 1.05 2.16 2.16 0 002.95.84 2.16 2.16 0 01.64-1.35C7.79 16.24 5.9 15.56 5.9 12.37a3.32 3.32 0 01.88-2.3 3.08 3.08 0 01.08-2.27s.72-.23 2.36.88a8.13 8.13 0 014.3 0c1.64-1.11 2.35-.88 2.35-.88a3.06 3.06 0 01.09 2.27 3.32 3.32 0 01.88 2.3c0 3.2-1.95 3.87-3.8 4.08a2.42 2.42 0 01.69 1.88v2.79c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
+            <div style="text-align:left">
+              <div style="font-size:0.65rem; opacity:0.5; text-transform:uppercase; font-weight:700;">Awaiting Certification</div>
+              <div style="font-size:1.1rem; font-weight:800; opacity:0.6;">App Store</div>
+            </div>
+            <span class="badge-soon" style="top:-8px; right:-8px;">Pending</span>
+          </a>
+        </div>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Compatible across Android versions 6.0+ · Modular micro-tier subscription logic integrated</p>
+
+        <!-- Dynamic Connect Infrastructure -->
+        <div class="social-cluster" id="connect">
+          <a href="https://www.youtube.com/@Hileonbt" target="_blank" class="social-node">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            YouTube Channel
+          </a>
+          <a href="https://www.facebook.com/hileonbt/" target="_blank" class="social-node">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            Facebook Hub
+          </a>
+          <a href="https://www.instagram.com/hileonbt/" target="_blank" class="social-node">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram Network
+          </a>
+          <a href="https://www.linkedin.com/company/hileon-budget-tracker/" target="_blank" class="social-node">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn Enterprise
+          </a>
+          <a href="https://www.tiktok.com/@hileonbt" target="_blank" class="social-node">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>
+            TikTok Flow
+          </a>
+        </div>
+        <p class="support-terminal">Communications Bridge: <a href="mailto:support@hileonapp.com">support@hileonapp.com</a></p>
       </div>
     </div>
+
   </div>
-</section>
 
-<hr class="divider"/>
-
-<section id="modes">
-  <div class="container">
-    <div class="section-eyebrow">Three Modes</div>
-    <h2>Personal, <em>Business</em> &amp; Project</h2>
-    <p class="section-sub">Switch between three powerful modes any time. Your data stays separate, organised and beautiful.</p>
-    <div class="modes-grid">
-      <div class="mode-card">
-        <div class="mode-card-icon" style="background:var(--orange-light);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  <!-- ═══ FOOTER EXTRAPOLATION ═══ -->
+  <footer>
+    <div class="wrapper">
+      <div class="footer-core">
+        <a href="#" class="footer-logo">Hileon</a>
+        <p class="footer-rights">© 2026 Hileon Budget Tracker · Synthesized in Africa</p>
+        <div class="footer-nav">
+          <a href="https://hileon-pixel.github.io/hileon-privacy-policy" target="_blank">Privacy Architecture</a>
+          <a href="mailto:support@hileonapp.com">Support Interface</a>
         </div>
-        <h3>Personal</h3>
-        <p class="mode-desc">Track daily life spending with clarity. Know exactly where every dollar, rand or shilling goes.</p>
-        <ul class="mode-list">
-          <li>8 expense categories</li>
-          <li>Monthly budget rings &amp; charts</li>
-          <li>12-month budget editor</li>
-          <li>Savings summary by period</li>
-          <li>Full transaction history</li>
-        </ul>
-      </div>
-      <div class="mode-card">
-        <div class="mode-card-icon" style="background:var(--orange-light);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
-        </div>
-        <h3>Business</h3>
-        <p class="mode-desc">Full business suite — invoicing, inventory, P&amp;L and multi-profile support.</p>
-        <ul class="mode-list">
-          <li>Professional invoice system</li>
-          <li>Inventory management</li>
-          <li>P&amp;L tracker with tax reserve</li>
-          <li>Multiple business profiles</li>
-          <li>CSV export &amp; import</li>
-        </ul>
-      </div>
-      <div class="mode-card">
-        <div class="mode-card-icon" style="background:var(--orange-light);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8794A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </div>
-        <h3>Project</h3>
-        <p class="mode-desc">Track budgets, phases and funding for any project — construction, renovation, events and more.</p>
-        <ul class="mode-list">
-          <li>Project budget tracking</li>
-          <li>Phase management</li>
-          <li>Contribution &amp; funding sources</li>
-          <li>Savings goals</li>
-          <li>Business cost linking</li>
-        </ul>
       </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<hr class="divider"/>
+  <!-- ═══ MATHEMATICAL ENGINE & MATRIX TRANSITIONS ═══ -->
+  <script>
+    // ─── 1. KINETIC RE-ENGINEERED CANVAS LOGIC ───
+    const canvas = document.getElementById('ambient-matrix');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
 
-<section class="langs-section">
-  <div class="container">
-    <div class="section-eyebrow">Languages</div>
-    <h2>Speak your <em>language</em></h2>
-    <p class="section-sub">Hileon is available in 6 languages — because finance should be accessible to everyone across Africa and beyond.</p>
-    <div class="lang-grid">
-      <div class="lang-card"><div class="lang-flag">🇬🇧</div><div class="lang-name">English</div></div>
-      <div class="lang-card"><div class="lang-flag">🇫🇷</div><div class="lang-name">Français</div></div>
-      <div class="lang-card"><div class="lang-flag">🇵🇹</div><div class="lang-name">Português</div></div>
-      <div class="lang-card"><div class="lang-flag">🇰🇪</div><div class="lang-name">Swahili</div></div>
-      <div class="lang-card"><div class="lang-flag">🇸🇦</div><div class="lang-name">العربية</div></div>
-      <div class="lang-card"><div class="lang-flag">🇪🇹</div><div class="lang-name">አማርኛ</div></div>
-    </div>
-  </div>
-</section>
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
 
-<hr class="divider"/>
+    // Highly synchronized vector configurations matching the view states
+    const paletteProfiles = {
+      default: { r: 232, g: 121, b: 74, count: 60, speedMult: 0.6, range: 140 }, // Coral
+      coral:   { r: 232, g: 121, b: 74, count: 80, speedMult: 1.2, range: 120 }, // Intense Coral
+      magenta: { r: 255, g: 0,   b: 127, count: 110, speedMult: 2.0, range: 90 },  // Hyper Business
+      cyan:    { r: 0,   g: 242, b: 254, count: 50, speedMult: 0.4, range: 180 }   // Calm Projects
+    };
 
-<section id="pricing">
-  <div class="container">
-    <div class="section-eyebrow">Pricing</div>
-    <h2>Simple, honest <em>pricing</em></h2>
-    <p class="section-sub">Prices shown at checkout in your local currency via Google Play. No hidden fees.</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-badge">Free</div>
-        <div class="price-name">Free</div>
-        <div class="price-amount">$0</div>
-        <div class="price-freq">forever</div>
-        <hr class="price-divider"/>
-        <ul class="price-features">
-          <li><span class="price-check">✓</span> Personal expense tracking</li>
-          <li><span class="price-check">✓</span> Budget &amp; charts</li>
-          <li><span class="price-check">✓</span> 150+ currencies &amp; 6 languages</li>
-          <li><span class="price-check">✓</span> 50 biz transactions/month</li>
-          <li><span class="price-check">✓</span> Works offline</li>
-        </ul>
-      </div>
-      <div class="price-card featured">
-        <div class="price-badge">Popular</div>
-        <div class="price-name">Profile Pro</div>
-        <div class="price-amount">Local price</div>
-        <div class="price-freq">via Google Play</div>
-        <hr class="price-divider"/>
-        <ul class="price-features">
-          <li><span class="price-check">✓</span> Everything in Free</li>
-          <li><span class="price-check">✓</span> Personal Insights tab</li>
-          <li><span class="price-check">✓</span> Budget &amp; savings alerts</li>
-          <li><span class="price-check">✓</span> CSV export &amp; import</li>
-          <li><span class="price-check">✓</span> Project mode (up to 5)</li>
-        </ul>
-      </div>
-      <div class="price-card">
-        <div class="price-badge">Business</div>
-        <div class="price-name">Business Pro</div>
-        <div class="price-amount">Local price</div>
-        <div class="price-freq">via Google Play</div>
-        <hr class="price-divider"/>
-        <ul class="price-features">
-          <li><span class="price-check">✓</span> 300 biz transactions/month</li>
-          <li><span class="price-check">✓</span> Full invoice system</li>
-          <li><span class="price-check">✓</span> Inventory management</li>
-          <li><span class="price-check">✓</span> Business Insights tab</li>
-          <li><span class="price-check">✓</span> Up to 3 business profiles</li>
-        </ul>
-      </div>
-      <div class="price-card">
-        <div class="price-badge">Everything</div>
-        <div class="price-name">Ultimate</div>
-        <div class="price-amount">Local price</div>
-        <div class="price-freq">via Google Play</div>
-        <hr class="price-divider"/>
-        <ul class="price-features">
-          <li><span class="price-check">✓</span> Everything unlocked</li>
-          <li><span class="price-check">✓</span> Unlimited biz transactions</li>
-          <li><span class="price-check">✓</span> Unlimited business profiles</li>
-          <li><span class="price-check">✓</span> Unlimited projects</li>
-          <li><span class="price-check">✓</span> All notifications</li>
-          <li><span class="price-check">✓</span> All future features</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+    let activeProfile = paletteProfiles.default;
+    let computedProfile = { ...paletteProfiles.default };
 
-<div class="container">
-  <section class="download-section" id="download">
-    <h2>Get Hileon <em>free</em> today</h2>
-    <p>Available now on Google Play. No account required.<br/>Works from the moment you install it.</p>
-    <div class="download-btns">
-      <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" class="dl-btn dl-btn-android">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
-        <div style="text-align:left;">
-          <div style="font-size:0.7rem;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:0.5px;">Get it on</div>
-          <div style="font-size:1rem;font-weight:800;">Google Play</div>
-        </div>
-      </a>
-      <a href="#" class="dl-btn dl-btn-ios">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 00-3.16 19.5c.5.08.68-.22.68-.48v-1.7C6.73 19.91 6.14 18 6.14 18A2.69 2.69 0 015 16.5c-.91-.62.07-.61.07-.61a2.13 2.13 0 011.55 1.05 2.16 2.16 0 002.95.84 2.16 2.16 0 01.64-1.35C7.79 16.24 5.9 15.56 5.9 12.37a3.32 3.32 0 01.88-2.3 3.08 3.08 0 01.08-2.27s.72-.23 2.36.88a8.13 8.13 0 014.3 0c1.64-1.11 2.35-.88 2.35-.88a3.06 3.06 0 01.09 2.27 3.32 3.32 0 01.88 2.3c0 3.2-1.95 3.87-3.8 4.08a2.42 2.42 0 01.69 1.88v2.79c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>
-        <div style="text-align:left;">
-          <div style="font-size:0.7rem;font-weight:600;opacity:0.6;text-transform:uppercase;letter-spacing:0.5px;">Download on the</div>
-          <div style="font-size:1rem;font-weight:800;">App Store</div>
-        </div>
-        <span class="soon">Coming Soon</span>
-      </a>
-    </div>
-    <p class="download-note">Android 6.0 and above · Free with optional subscription upgrades</p>
-  </section>
-</div>
+    class GeometricPoint {
+      constructor() {
+        this.reseed(true);
+      }
+      reseed(randomStart = false) {
+        this.x = randomStart ? Math.random() * width : (Math.random() > 0.5 ? 0 : width);
+        this.y = randomStart ? Math.random() * height : Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 1.5;
+        this.vy = (Math.random() - 0.5) * 1.5;
+        this.weight = Math.random() * 2.5 + 1;
+      }
+      advance() {
+        this.x += this.vx * computedProfile.speedMult;
+        this.y += this.vy * computedProfile.speedMult;
+        if(this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) {
+          this.reseed(false);
+        }
+      }
+    }
 
-<section class="social-section" id="connect">
-  <div class="container">
-    <div class="section-eyebrow">Community</div>
-    <h2>Follow <em>Hileon</em></h2>
-    <p class="section-sub">Stay updated on new features, finance tips and app news across all platforms.</p>
-    <div class="social-grid">
-      <a href="https://www.youtube.com/@Hileonbt" target="_blank" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.45a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
-        YouTube
-      </a>
-      <a href="https://www.facebook.com/hileonbt/" target="_blank" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-        Facebook
-      </a>
-      <a href="https://www.instagram.com/hileonbt/" target="_blank" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        Instagram
-      </a>
-      <a href="https://www.linkedin.com/company/hileon-budget-tracker/" target="_blank" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <a href="https://www.tiktok.com/@hileonbt" target="_blank" class="social-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>
-        TikTok
-      </a>
-    </div>
-    <p class="contact-line">Questions? Email us at <a href="mailto:support@hileonapp.com">support@hileonapp.com</a></p>
-  </div>
-</section>
+    const clusterSize = 130;
+    const points = Array.from({ length: clusterSize }, () => new GeometricPoint());
 
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <a href="#" class="footer-logo">Hileon</a>
-      <p class="footer-copy">© 2026 Hileon Budget Tracker · Built in Africa</p>
-      <div class="footer-links">
-        <a href="https://hileon-pixel.github.io/hileon-privacy-policy" target="_blank">Privacy Policy</a>
-        <a href="mailto:support@hileonapp.com">Contact</a>
-      </div>
-    </div>
-  </div>
-</footer>
+    function lerp(init, end, factor) { return init + (end - init) * factor; }
 
+    function syncGlobalProfiles() {
+      computedProfile.r = Math.round(lerp(computedProfile.r, activeProfile.r, 0.04));
+      computedProfile.g = Math.round(lerp(computedProfile.g, activeProfile.g, 0.04));
+      computedProfile.b = Math.round(lerp(computedProfile.b, activeProfile.b, 0.04));
+      computedProfile.speedMult = lerp(computedProfile.speedMult, activeProfile.speedMult, 0.04);
+      computedProfile.range = lerp(computedProfile.range, activeProfile.range, 0.04);
+      computedProfile.count = Math.round(lerp(computedProfile.count, activeProfile.count, 0.04));
+
+      // Feedback updated values directly into layout tokens
+      document.documentElement.style.setProperty('--accent', `${computedProfile.r}, ${computedProfile.g}, ${computedProfile.b}`);
+    }
+
+    function renderLoop() {
+      ctx.fillStyle = 'rgba(11, 14, 20, 0.18)'; // Organic persistence decay trailing
+      ctx.fillRect(0, 0, width, height);
+
+      syncGlobalProfiles();
+
+      // Render structural lattice networks
+      for(let i = 0; i < computedProfile.count; i++) {
+        points[i].advance();
+        
+        for(let j = i + 1; j < computedProfile.count; j++) {
+          const deltaX = points[i].x - points[j].x;
+          const deltaY = points[i].y - points[j].y;
+          const linearDist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+          if(linearDist < computedProfile.range) {
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            const intensity = (1 - linearDist / computedProfile.range) * 0.12;
+            ctx.strokeStyle = `rgba(${computedProfile.r}, ${computedProfile.g}, ${computedProfile.b}, ${intensity})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+
+        // Draw structural nodes
+        ctx.beginPath();
+        ctx.arc(points[i].x, points[i].y, points[i].weight, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${computedProfile.r}, ${computedProfile.g}, ${computedProfile.b}, 0.35)`;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    // ─── 2. INTERACTIVE MATRIX TRIGGERS ───
+    
+    // Profile pods vector shifts
+    const modePods = document.querySelectorAll('.mode-pod');
+    modePods.forEach(pod => {
+      pod.addEventListener('mouseenter', () => {
+        const selectedTheme = pod.getAttribute('data-theme');
+        if(paletteProfiles[selectedTheme]) activeProfile = paletteProfiles[selectedTheme];
+      });
+      pod.addEventListener('mouseleave', () => {
+        activeProfile = paletteProfiles.default;
+      });
+    });
+
+    // Polyglot Engine Dialect Shift
+    const languageNodes = document.querySelectorAll('.lang-node');
+    languageNodes.forEach(node => {
+      node.addEventListener('click', () => {
+        languageNodes.forEach(n => n.classList.remove('active-focus'));
+        node.classList.add('active-focus');
+        
+        // Mutate canvas matrices unpredictably to mimic data shifts
+        activeProfile = {
+          r: Math.floor(Math.random() * 155) + 100,
+          g: Math.floor(Math.random() * 155) + 100,
+          b: Math.floor(Math.random() * 200) + 55,
+          count: Math.floor(Math.random() * 50) + 60,
+          speedMult: Math.random() * 1.8 + 0.5,
+          range: Math.floor(Math.random() * 80) + 100
+        };
+      });
+    });
+
+    // Navigation Tracker Intersections
+    const trackedSections = document.querySelectorAll('section');
+    const linksCollection = document.querySelectorAll('.nav-menu li');
+
+    window.addEventListener('scroll', () => {
+      let activeTarget = 'home';
+      const offsetTop = window.scrollY + 200;
+      
+      trackedSections.forEach(sec => {
+        if(offsetTop >= sec.offsetTop) {
+          activeTarget = sec.getAttribute('id');
+        }
+      });
+
+      linksCollection.forEach(li => {
+        li.classList.remove('active');
+        if(li.querySelector('a').getAttribute('href') === `#${activeTarget}`) {
+          li.classList.add('active');
+        }
+      });
+    });
+
+    // Spin engine vector loop
+    renderLoop();
+  </script>
 </body>
 </html>
