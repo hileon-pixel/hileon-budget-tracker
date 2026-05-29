@@ -6,6 +6,8 @@
   <title>Hileon Budget Tracker — Smart Finance</title>
   <meta name="description" content="Hileon Budget Tracker is a powerful Android finance app for personal budgeting, business invoicing and project tracking. Works offline. 150+ currencies. 14 languages. Free on Google Play."/>
   
+  <link rel="icon" type="image/png" href="favicon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -153,10 +155,10 @@
     @keyframes eyePulse { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 25px var(--text-pure); } }
 
     .ai-perks { display: flex; flex-direction: column; gap: 24px; }
-    .ai-perk-card { background: var(--panel-glass); border: 1px solid var(--panel-border); padding: 24px; border-radius: 20px; transition: border-color 0.3s; }
-    .ai-perk-card:hover { border-color: rgba(var(--accent), 0.4); }
-    .ai-perk-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; color: var(--text-pure); }
-    .ai-perk-card p { font-size: 0.9rem; color: var(--text-estate); line-height: 1.6; }
+    .ai-perks-card { background: var(--panel-glass); border: 1px solid var(--panel-border); padding: 24px; border-radius: 20px; transition: border-color 0.3s; }
+    .ai-perks-card:hover { border-color: rgba(var(--accent), 0.4); }
+    .ai-perks-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; color: var(--text-pure); }
+    .ai-perks-card p { font-size: 0.9rem; color: var(--text-estate); line-height: 1.6; }
 
     /* ═══ BENTO ARCHITECTURE ═══ */
     .bento-vault { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
@@ -238,8 +240,9 @@
     .job-body p { font-size: 0.9rem; color: var(--text-estate); line-height: 1.6; margin-top: 14px; }
     .job-body ul { margin-top: 10px; padding-left: 16px; }
     .job-body li { font-size: 0.85rem; color: var(--text-estate); margin-bottom: 6px; }
+    .job-body .mandatory-warning { font-size: 0.8rem; font-weight: 700; color: rgb(var(--accent)); margin-top: 12px; line-height: 1.4; text-transform: uppercase; border-left: 2px solid rgb(var(--accent)); padding-left: 8px; }
 
-    .job-accordion.active .job-body { max-height: 400px; }
+    .job-accordion.active .job-body { max-height: 450px; }
     .job-accordion.active .accordion-arrow { transform: rotate(45deg); color: rgb(var(--accent)); }
 
     /* ═══ FOOTER ═══ */
@@ -377,15 +380,15 @@
         </div>
 
         <div class="ai-perks">
-          <div class="ai-perk-card">
+          <div class="ai-perks-card">
             <h3>Autonomous Private Analysis</h3>
             <p>Because the AI is compiled locally to execute within your device's native kernel, your business spreadsheets, private savings data, and invoice assets remain 100% invisible to external networks.</p>
           </div>
-          <div class="ai-perk-card">
+          <div class="ai-perks-card">
             <h3>Strategic Project Cost Mitigation</h3>
             <p>Hileon AI runs predictive vectors on your project milestone phases, alerting you instantly if your burn rate threatens overall threshold metrics before losses occur.</p>
           </div>
-          <div class="ai-perk-card">
+          <div class="ai-perks-card">
             <h3>Localized Business Strategy</h3>
             <p>Processes regional tax environments and enterprise structures instantly. Get immediate balance sheet auditing tips mapped specifically to your active operational profile.</p>
           </div>
@@ -472,7 +475,7 @@
         <div class="lang-node" data-lang="6"><span class="lang-globe">🇰🇪</span><span class="lang-title">Kiswahili</span></div>
         <div class="lang-node" data-lang="7"><span class="lang-globe">🇪🇸</span><span class="lang-title">Español</span></div>
         <div class="lang-node" data-lang="8"><span class="lang-globe">🇸🇦</span><span class="lang-title">العربية</span></div>
-        <div class="lang-node" data-lang="9"><span class="lang-globe">🇵🇰</span><span class="lang-title">اردو</span></div>
+        <div class="lang-node" data-lang="9"><span class="lang-globe">🇵🇰</span><span class="lang-title">اردו</span></div>
         <div class="lang-node" data-lang="10"><span class="lang-globe">🇮🇳</span><span class="lang-title">हिन्दी</span></div>
         <div class="lang-node" data-lang="11"><span class="lang-globe">🇧🇩</span><span class="lang-title">বাংলা</span></div>
         <div class="lang-node" data-lang="12"><span class="lang-globe">🇮🇩</span><span class="lang-title">Indonesia</span></div>
@@ -516,72 +519,19 @@
     <div class="job-accordion">
       <div class="job-header">
         <div>
-          <div class="job-title">Senior Android Engineer</div>
-          <div class="job-meta">Engineering · Mutare, Zimbabwe (Hybrid)</div>
-        </div>
-        <span class="accordion-arrow">＋</span>
-      </div>
-      <div class="job-body">
-        <p>We are searching for a native Android engineering specialist to scale our localized database performance structures and client runtime optimizations.</p>
-        <ul>
-          <li>Advanced proficiency in Kotlin, Jetpack Compose, and SQLite architectures.</li>
-          <li>Deep expertise optimizing systems for absolute offline deployment.</li>
-        </ul>
-        <a href="mailto:support@hileonapp.com?subject=Job%20Application%20-%20Senior%20Android%20Engineer%20%5BHileon%5D" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Submit Application</a>
-      </div>
-    </div>
-
-    <div class="job-accordion">
-      <div class="job-header">
-        <div>
-          <div class="job-title">Growth Marketing Lead</div>
-          <div class="job-meta">Growth · Remote (Global)</div>
-        </div>
-        <span class="accordion-arrow">＋</span>
-      </div>
-      <div class="job-body">
-        <p>Seeking an algorithmic growth marketer to command distribution loops across highly distinct developing economic vectors (East &amp; Southern Africa, Southeast Asia).</p>
-        <ul>
-          <li>Proven scaling metrics in emerging application landscapes.</li>
-          <li>Data-driven mastery of performance analytics without cookie tracking dependencies.</li>
-        </ul>
-        <a href="mailto:support@hileonapp.com?subject=Job%20Application%20-%20Growth%20Marketing%20Lead%20%5BHileon%5D" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Submit Application</a>
-      </div>
-    </div>
-
-    <div class="job-accordion">
-      <div class="job-header">
-        <div>
           <div class="job-title">Social Media Affiliate</div>
-          <div class="job-meta">Marketing · Addis Ababa, Ethiopia</div>
+          <div class="job-meta">Marketing · Harare, Zimbabwe</div>
         </div>
         <span class="accordion-arrow">＋</span>
       </div>
       <div class="job-body">
-        <p>Drive localized growth, brand awareness, and community acquisition loops for Hileon's private budgeting tools within Ethiopia.</p>
+        <p>We are looking for an active Social Media Affiliate to expand Hileon's presence, awareness, and community growth within Zimbabwe's evolving financial ecosystem.</p>
         <ul>
-          <li>Deep understanding of localized African financial landscapes and digital channels.</li>
-          <li>Ability to build high-converting growth loops and organic educational channels.</li>
+          <li>Possess a minimum of 10,000 (10k) followers on at least one platform: TikTok, Facebook, Instagram, YouTube, or X.</li>
+          <li>Possess a minimum of 100,000 (100k) cumulative organic engagement parameters across your digital profile layout.</li>
         </ul>
-        <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20Ethiopia" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
-      </div>
-    </div>
-
-    <div class="job-accordion">
-      <div class="job-header">
-        <div>
-          <div class="job-title">Social Media Affiliate</div>
-          <div class="job-meta">Marketing · Nairobi, Kenya</div>
-        </div>
-        <span class="accordion-arrow">＋</span>
-      </div>
-      <div class="job-body">
-        <p>Lead Hileon's creative community presence and affiliate strategy across Kenya's dynamic financial ecosystem.</p>
-        <ul>
-          <li>Strong content engine setup and understanding of modern digital marketing dynamics.</li>
-          <li>Familiarity with regional enterprise models and micro-business needs.</li>
-        </ul>
-        <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20Kenya" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
+        <p class="mandatory-warning">Mandatory notice: If you do not meet both of these foundational threshold criteria, please do not apply.</p>
+        <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20Zimbabwe" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
       </div>
     </div>
 
@@ -594,14 +544,73 @@
         <span class="accordion-arrow">＋</span>
       </div>
       <div class="job-body">
-        <p>Scale user discovery engines and handle broad regional audience development loops throughout Nigeria.</p>
+        <p>We are looking for an active Social Media Affiliate to expand Hileon's presence, awareness, and community growth within Nigeria's evolving financial ecosystem.</p>
         <ul>
-          <li>Experience running performance metrics and engagement loops inside emerging application layouts.</li>
-          <li>Proven ability to manage content syndication without relying on intrusive trackers.</li>
+          <li>Possess a minimum of 10,000 (10k) followers on at least one platform: TikTok, Facebook, Instagram, YouTube, or X.</li>
+          <li>Possess a minimum of 100,000 (100k) cumulative organic engagement parameters across your digital profile layout.</li>
         </ul>
+        <p class="mandatory-warning">Mandatory notice: If you do not meet both of these foundational threshold criteria, please do not apply.</p>
         <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20Nigeria" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
       </div>
     </div>
+
+    <div class="job-accordion">
+      <div class="job-header">
+        <div>
+          <div class="job-title">Social Media Affiliate</div>
+          <div class="job-meta">Marketing · Addis Ababa, Ethiopia</div>
+        </div>
+        <span class="accordion-arrow">＋</span>
+      </div>
+      <div class="job-body">
+        <p>We are looking for an active Social Media Affiliate to expand Hileon's presence, awareness, and community growth within Ethiopia's evolving financial ecosystem.</p>
+        <ul>
+          <li>Possess a minimum of 10,000 (10k) followers on at least one platform: TikTok, Facebook, Instagram, YouTube, or X.</li>
+          <li>Possess a minimum of 100,000 (100k) cumulative organic engagement parameters across your digital profile layout.</li>
+        </ul>
+        <p class="mandatory-warning">Mandatory notice: If you do not meet both of these foundational threshold criteria, please do not apply.</p>
+        <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20Ethiopia" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
+      </div>
+    </div>
+
+    <div class="job-accordion">
+      <div class="job-header">
+        <div>
+          <div class="job-title">Social Media Affiliate</div>
+          <div class="job-meta">Marketing · Accra, Ghana</div>
+        </div>
+        <span class="accordion-arrow">＋</span>
+      </div>
+      <div class="job-body">
+        <p>We are looking for an active Social Media Affiliate to expand Hileon's presence, awareness, and community growth within Ghana's evolving financial ecosystem.</p>
+        <ul>
+          <li>Possess a minimum of 10,000 (10k) followers on at least one platform: TikTok, Facebook, Instagram, YouTube, or X.</li>
+          <li>Possess a minimum of 100,000 (100k) cumulative organic engagement parameters across your digital profile layout.</li>
+        </ul>
+        <p class="mandatory-warning">Mandatory notice: If you do not meet both of these foundational threshold criteria, please do not apply.</p>
+        <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20Ghana" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
+      </div>
+    </div>
+
+    <div class="job-accordion">
+      <div class="job-header">
+        <div>
+          <div class="job-title">Social Media Affiliate</div>
+          <div class="job-meta">Marketing · Kinshasa, DR Congo</div>
+        </div>
+        <span class="accordion-arrow">＋</span>
+      </div>
+      <div class="job-body">
+        <p>We are looking for an active Social Media Affiliate to expand Hileon's presence, awareness, and community growth within the Democratic Republic of the Congo's evolving financial ecosystem.</p>
+        <ul>
+          <li>Possess a minimum of 10,000 (10k) followers on at least one platform: TikTok, Facebook, Instagram, YouTube, or X.</li>
+          <li>Possess a minimum of 100,000 (100k) cumulative organic engagement parameters across your digital profile layout.</li>
+        </ul>
+        <p class="mandatory-warning">Mandatory notice: If you do not meet both of these foundational threshold criteria, please do not apply.</p>
+        <a href="mailto:support@hileonapp.com?subject=Application:%20Social%20Media%20Affiliate%20-%20DRCongo" class="btn btn-glow" style="padding: 12px 24px; font-size: 0.85rem; margin-top: 20px; border-radius: 12px;">Apply via Email</a>
+      </div>
+    </div>
+
   </div>
 
   <footer>
@@ -704,10 +713,10 @@
       {
         "@context": "https://schema.org/",
         "@type": "JobPosting",
-        "title": "Senior Android Engineer",
-        "description": "We are searching for a native Android engineering specialist to scale our localized database performance structures and client runtime optimizations. Advanced proficiency in Kotlin, Jetpack Compose, and SQLite architectures.",
-        "datePosted": "2026-05-28",
-        "employmentType": "FULL_TIME",
+        "title": "Social Media Affiliate",
+        "description": "We are seeking a highly motivated and creative Social Media Affiliate to expand our brand's presence and drive community growth within Zimbabwe. Mandatory Requirements: Minimum of 10k followers on TikTok, Facebook, Instagram, YouTube, or X. Minimum of 100k cumulative organic engagements across your profile layout. Applications failing to meet these strict requirements will not be reviewed.",
+        "datePosted": "2026-05-29",
+        "employmentType": "OTHER",
         "hiringOrganization": {
           "@type": "Organization",
           "name": "Hileon Budget Tracker",
@@ -717,81 +726,22 @@
           "@type": "Place",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "Mutare",
-            "addressRegion": "Manicaland",
+            "addressLocality": "Harare",
             "addressCountry": "ZW"
           }
-        }
-      },
-      {
-        "@context": "https://schema.org/",
-        "@type": "JobPosting",
-        "title": "Growth Marketing Lead",
-        "description": "Seeking an algorithmic growth marketer to command distribution loops across highly distinct developing economic vectors (East & Southern Africa, Southeast Asia). Proven scaling metrics in emerging application landscapes.",
-        "datePosted": "2026-05-28",
-        "employmentType": "FULL_TIME",
-        "hiringOrganization": {
-          "@type": "Organization",
-          "name": "Hileon Budget Tracker",
-          "sameAs": "https://hileonapp.com"
         },
-        "jobLocation": {
-          "@type": "Place",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Remote",
-            "addressCountry": "Global"
-          }
-        }
+        "applicantLocationRequirements": {
+          "@type": "Country",
+          "name": "Zimbabwe"
+        },
+        "jobLocationType": "TELECOMMUTE"
       },
       {
         "@context": "https://schema.org/",
         "@type": "JobPosting",
         "title": "Social Media Affiliate",
-        "description": "Drive localized growth, brand awareness, and community acquisition loops for Hileon's private budgeting tools within Ethiopia.",
-        "datePosted": "2026-05-28",
-        "employmentType": "OTHER",
-        "hiringOrganization": {
-          "@type": "Organization",
-          "name": "Hileon Budget Tracker",
-          "sameAs": "https://hileonapp.com"
-        },
-        "jobLocation": {
-          "@type": "Place",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Addis Ababa",
-            "addressCountry": "ET"
-          }
-        }
-      },
-      {
-        "@context": "https://schema.org/",
-        "@type": "JobPosting",
-        "title": "Social Media Affiliate",
-        "description": "Lead Hileon's creative community presence and affiliate strategy across Kenya's dynamic financial ecosystem.",
-        "datePosted": "2026-05-28",
-        "employmentType": "OTHER",
-        "hiringOrganization": {
-          "@type": "Organization",
-          "name": "Hileon Budget Tracker",
-          "sameAs": "https://hileonapp.com"
-        },
-        "jobLocation": {
-          "@type": "Place",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Nairobi",
-            "addressCountry": "KE"
-          }
-        }
-      },
-      {
-        "@context": "https://schema.org/",
-        "@type": "JobPosting",
-        "title": "Social Media Affiliate",
-        "description": "Scale user discovery engines and handle broad regional audience development loops throughout Nigeria.",
-        "datePosted": "2026-05-28",
+        "description": "We are seeking a highly motivated and creative Social Media Affiliate to expand our brand's presence and drive community growth within Nigeria. Mandatory Requirements: Minimum of 10k followers on TikTok, Facebook, Instagram, YouTube, or X. Minimum of 100k cumulative organic engagements across your profile layout. Applications failing to meet these strict requirements will not be reviewed.",
+        "datePosted": "2026-05-29",
         "employmentType": "OTHER",
         "hiringOrganization": {
           "@type": "Organization",
@@ -805,7 +755,90 @@
             "addressLocality": "Lagos",
             "addressCountry": "NG"
           }
-        }
+        },
+        "applicantLocationRequirements": {
+          "@type": "Country",
+          "name": "Nigeria"
+        },
+        "jobLocationType": "TELECOMMUTE"
+      },
+      {
+        "@context": "https://schema.org/",
+        "@type": "JobPosting",
+        "title": "Social Media Affiliate",
+        "description": "We are seeking a highly motivated and creative Social Media Affiliate to expand our brand's presence and drive community growth within Ethiopia. Mandatory Requirements: Minimum of 10k followers on TikTok, Facebook, Instagram, YouTube, or X. Minimum of 100k cumulative organic engagements across your profile layout. Applications failing to meet these strict requirements will not be reviewed.",
+        "datePosted": "2026-05-29",
+        "employmentType": "OTHER",
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": "Hileon Budget Tracker",
+          "sameAs": "https://hileonapp.com"
+        },
+        "jobLocation": {
+          "@type": "Place",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Addis Ababa",
+            "addressCountry": "ET"
+          }
+        },
+        "applicantLocationRequirements": {
+          "@type": "Country",
+          "name": "Ethiopia"
+        },
+        "jobLocationType": "TELECOMMUTE"
+      },
+      {
+        "@context": "https://schema.org/",
+        "@type": "JobPosting",
+        "title": "Social Media Affiliate",
+        "description": "We are seeking a highly motivated and creative Social Media Affiliate to expand our brand's presence and drive community growth within Ghana. Mandatory Requirements: Minimum of 10k followers on TikTok, Facebook, Instagram, YouTube, or X. Minimum of 100k cumulative organic engagements across your profile layout. Applications failing to meet these strict requirements will not be reviewed.",
+        "datePosted": "2026-05-29",
+        "employmentType": "OTHER",
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": "Hileon Budget Tracker",
+          "sameAs": "https://hileonapp.com"
+        },
+        "jobLocation": {
+          "@type": "Place",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Accra",
+            "addressCountry": "GH"
+          }
+        },
+        "applicantLocationRequirements": {
+          "@type": "Country",
+          "name": "Ghana"
+        },
+        "jobLocationType": "TELECOMMUTE"
+      },
+      {
+        "@context": "https://schema.org/",
+        "@type": "JobPosting",
+        "title": "Social Media Affiliate",
+        "description": "We are seeking a highly motivated and creative Social Media Affiliate to expand our brand's presence and drive community growth within the Democratic Republic of the Congo. Mandatory Requirements: Minimum of 10k followers on TikTok, Facebook, Instagram, YouTube, or X. Minimum of 100k cumulative organic engagements across your profile layout. Applications failing to meet these strict requirements will not be reviewed.",
+        "datePosted": "2026-05-29",
+        "employmentType": "OTHER",
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": "Hileon Budget Tracker",
+          "sameAs": "https://hileonapp.com"
+        },
+        "jobLocation": {
+          "@type": "Place",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Kinshasa",
+            "addressCountry": "CD"
+          }
+        },
+        "applicantLocationRequirements": {
+          "@type": "Country",
+          "name": "Democratic Republic of the Congo"
+        },
+        "jobLocationType": "TELECOMMUTE"
       }
     ]
   </script>
