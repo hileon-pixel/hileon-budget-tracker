@@ -65,8 +65,12 @@ body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor .mag
 @keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4vw,-5vh) scale(1.15)}}
 .veins{mix-blend-mode:screen}
 .veins path{fill:none;stroke-width:1}
-.veins .g{stroke:url(#vg);opacity:.7;stroke-width:1.4}
-.veins .t{stroke:url(#vt);opacity:.42;stroke-width:1.2}
+.veins .g{stroke:url(#vg);opacity:.8;stroke-width:1.5}
+.veins .t{stroke:url(#vt);opacity:.5;stroke-width:1.3}
+.vsway-a{transform-box:fill-box;transform-origin:center;animation:swayA 13s ease-in-out infinite}
+.vsway-b{transform-box:fill-box;transform-origin:center;animation:swayB 16s ease-in-out infinite}
+@keyframes swayA{0%,100%{transform:translate(0,0) skewX(0deg)}50%{transform:translate(16px,-7px) skewX(2.2deg)}}
+@keyframes swayB{0%,100%{transform:translate(0,0) skewX(0deg)}50%{transform:translate(-14px,9px) skewX(-2.4deg)}}
 .motes{will-change:transform}
 .mote{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(var(--emerald-rgb),0.5);box-shadow:0 0 8px rgba(var(--emerald-rgb),0.6);animation:floatm linear infinite}
 @keyframes floatm{0%{transform:translateY(20px);opacity:0}10%{opacity:.7}90%{opacity:.7}100%{transform:translateY(-120px);opacity:0}}
@@ -87,7 +91,8 @@ body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor .mag
 .cursor-ring.hot{width:54px;height:54px;margin:-27px 0 0 -27px;background:rgba(var(--emerald-rgb),0.08);border-color:rgba(var(--emerald-rgb),0.9)}
 
 /* ═══════════ PRELOADER ═══════════ */
-.preloader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .7s var(--ease),clip-path .9s var(--ease)}
+.preloader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .7s var(--ease),clip-path .9s var(--ease);animation:preGone .6s ease 2.1s forwards}
+@keyframes preGone{to{opacity:0;visibility:hidden;pointer-events:none}}
 .preloader.done{opacity:0;pointer-events:none;clip-path:inset(0 0 100% 0)}
 .pre-mark{width:88px;height:auto}
 .pre-word{font-family:var(--display);font-weight:700;letter-spacing:.2em;font-size:.82rem;color:var(--ink-soft);text-transform:uppercase;opacity:0;transform:translateY(8px)}
@@ -215,9 +220,10 @@ h1 em{font-style:italic;font-weight:500;color:var(--emerald);text-shadow:0 0 38p
 .chip .ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
 .chip .ic.em{background:rgba(var(--emerald-rgb),0.14)} .chip .ic.vi{background:rgba(var(--violet-rgb),0.16)} .chip .ic.go{background:rgba(var(--gold-rgb),0.16)}
 .chip .ic svg{width:16px;height:16px}
+.chip .meta{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
 .chip .t1{font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute)}
 .chip .t1.em{color:var(--emerald)}
-.chip .t2{font-family:var(--display);font-weight:700;font-size:.82rem;line-height:1.1;margin-top:2px}
+.chip .t2{font-family:var(--display);font-weight:700;font-size:.82rem;line-height:1.15}
 .chip.c1{top:30px;left:-34px} .chip.c2{top:232px;right:-46px} .chip.c3{bottom:74px;left:-30px}
 
 /* ═══════════ AI SECTION ═══════════ */
@@ -377,7 +383,6 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
 
 /* ═══════════ REDUCED MOTION ═══════════ */
 @media(prefers-reduced-motion:reduce){
-  .aurora,.eyebrow .dot,.cue .m::after,.marquee .track,.adv-orb .ring,.mote{animation:none}
   *{scroll-behavior:auto}
 }
 /* ═══════════ RESPONSIVE ═══════════ */
@@ -417,14 +422,22 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
         <stop offset="0" stop-color="rgba(43,232,155,0)"/><stop offset=".5" stop-color="rgba(43,232,155,0.7)"/><stop offset="1" stop-color="rgba(43,232,155,0)"/>
       </linearGradient>
     </defs>
+    <g class="vsway-a">
     <path class="g" d="M-60,170 C300,70 520,360 820,235 C1080,130 1250,420 1520,300"/>
     <path class="g" d="M-60,640 C260,540 560,780 900,650 C1150,560 1330,810 1520,710"/>
     <path class="t" d="M120,-40 C220,260 60,520 280,760 C420,930 360,990 430,1050"/>
+    <path class="g" d="M-60,300 C320,250 540,120 860,200 C1120,265 1300,140 1520,210"/>
+    <path class="g" d="M-60,500 C300,440 540,560 880,470 C1140,400 1320,520 1520,460"/>
+    <path class="t" d="M300,-40 C360,220 240,460 360,720 C440,900 380,980 420,1050"/>
+    </g>
+    <g class="vsway-b">
     <path class="g" d="M1480,40 C1180,180 1320,460 1080,680 C900,840 980,930 880,1000"/>
     <path class="t" d="M-60,420 C360,360 700,520 1040,420 C1280,350 1420,470 1520,420"/>
-    <path class="g" d="M-60,300 C320,250 540,120 860,200 C1120,265 1300,140 1520,210"/>
     <path class="t" d="M700,-40 C760,200 900,360 840,620 C800,800 880,900 820,1000"/>
     <path class="g" d="M-60,820 C300,760 520,880 820,800 C1080,735 1280,860 1520,800"/>
+    <path class="g" d="M1520,560 C1200,500 980,620 660,540 C420,480 220,600 -60,540"/>
+    <path class="t" d="M1100,-40 C1160,240 1020,480 1140,740 C1220,900 1160,980 1200,1050"/>
+    </g>
   </svg>
   <div class="motes par" data-par="0.5" id="motes"></div>
 </div>
@@ -562,17 +575,17 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
         </div>
       </div>
     </div>
-    <div class="chip ai c1" data-depth="26">
-      <div class="ic em"><svg viewBox="0 0 24 24" fill="none" stroke="#2be89b" stroke-width="2"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg></div>
-      <div><div class="t1 em">Hileon AI</div><div class="t2">On track</div></div>
+    <div class="chip c1" data-depth="26">
+      <span class="ic em"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#2be89b" stroke-width="2"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg></span>
+      <span class="meta"><span class="t1 em">Hileon AI</span><span class="t2">On track</span></span>
     </div>
     <div class="chip c2" data-depth="-20">
-      <div class="ic go"><svg viewBox="0 0 24 24" fill="none" stroke="#e7b469" stroke-width="2"><path d="M4 16l5-5 4 4 7-8"/><path d="M16 7h4v4"/></svg></div>
-      <div><div class="t1">vs last month</div><div class="t2" style="color:var(--gold)">+12%</div></div>
+      <span class="ic go"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#e7b469" stroke-width="2"><path d="M4 16l5-5 4 4 7-8"/><path d="M16 7h4v4"/></svg></span>
+      <span class="meta"><span class="t1">vs last month</span><span class="t2" style="color:var(--gold)">+12%</span></span>
     </div>
     <div class="chip c3" data-depth="34">
-      <div class="ic vi"><svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></div>
-      <div><div class="t1">Live rates</div><div class="t2">USD ⇄ EUR</div></div>
+      <span class="ic vi"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></span>
+      <span class="meta"><span class="t1">Live rates</span><span class="t2">USD ⇄ EUR</span></span>
     </div>
   </div>
   <div class="cue" id="cue">Scroll<div class="m"></div></div>
@@ -836,12 +849,11 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
   "use strict";
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var coarse=matchMedia('(pointer: coarse)').matches;
-  var cores=navigator.hardwareConcurrency||8, mem=navigator.deviceMemory||8;
-  var lowPower=(cores<=4||mem<=4)&&coarse;
   var hasGSAP=(typeof gsap!=='undefined'), hasST=(typeof ScrollTrigger!=='undefined');
-  var fancy=hasGSAP&&!reduce;
-  var ambient=!reduce&&!lowPower;
-  var pointerFX=fancy&&!coarse;
+  var lowPower=false;
+  var fancy=hasGSAP;
+  var ambient=true;
+  var pointerFX=hasGSAP&&!coarse;
   var $=function(s,c){return (c||document).querySelector(s);};
   var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));};
   if(hasGSAP&&hasST){gsap.registerPlugin(ScrollTrigger);}
@@ -856,7 +868,7 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
   /* motes */
   if(ambient){
     var mc=$('#motes'); var pal=['43,232,155','231,180,105','167,139,250','75,163,232'];
-    if(mc){ for(var i=0;i<22;i++){ var m=document.createElement('div'); m.className='mote';
+    if(mc){ for(var i=0;i<40;i++){ var m=document.createElement('div'); m.className='mote';
       var col=pal[i%pal.length], sz=(2+Math.random()*2.6).toFixed(1);
       m.style.left=(Math.random()*100)+'%'; m.style.top=(Math.random()*100)+'%';
       m.style.width=sz+'px'; m.style.height=sz+'px';
@@ -1020,7 +1032,85 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
 
   /* 3D AI core (desktop only; phones & reduced-motion get the CSS fallback) */
   function initAICore(){
-    if(!(fancy && !lowPower && !coarse)) return;
+    if(!(fancy && !coarse)) return;
     if(typeof THREE==='undefined') return;
     var canvas=$('#aiCanvas'); if(!canvas) return;
     var holder=$('#advCore'); if(!holder) return;
+    var w=holder.clientWidth||212, h=holder.clientHeight||212;
+    var renderer;
+    try{ renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true}); }catch(e){ return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.setSize(w,h,false);
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(50,w/h,0.1,100); camera.position.z=4.2;
+    var group=new THREE.Group(); scene.add(group);
+    group.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.15,1), new THREE.MeshBasicMaterial({color:0x0c3a2b})));
+    var wire=new THREE.Mesh(new THREE.IcosahedronGeometry(1.18,1), new THREE.MeshBasicMaterial({color:0x2be89b,wireframe:true,transparent:true,opacity:0.55})); group.add(wire);
+    var shell=new THREE.Mesh(new THREE.IcosahedronGeometry(1.72,1), new THREE.MeshBasicMaterial({color:0x4ba3e8,wireframe:true,transparent:true,opacity:0.16})); group.add(shell);
+    function halo(n,rin,rout,col,sz,op){
+      var p=new Float32Array(n*3);
+      for(var i=0;i<n;i++){ var r=rin+Math.random()*(rout-rin), th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+        p[i*3]=r*Math.sin(ph)*Math.cos(th); p[i*3+1]=r*Math.sin(ph)*Math.sin(th); p[i*3+2]=r*Math.cos(ph); }
+      var g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(p,3));
+      var m=new THREE.PointsMaterial({color:col,size:sz,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false});
+      var pts=new THREE.Points(g,m); scene.add(pts); return pts;
+    }
+    var p1=halo(420,1.5,2.9,0x2be89b,0.045,0.9), p2=halo(180,2.0,3.4,0xe7b469,0.03,0.7);
+    var mx=0,my=0,tmx=0,tmy=0;
+    holder.addEventListener('pointermove',function(e){ var r=holder.getBoundingClientRect(); tmx=((e.clientX-r.left)/r.width-0.5); tmy=((e.clientY-r.top)/r.height-0.5); });
+    holder.addEventListener('pointerleave',function(){ tmx=0; tmy=0; });
+    var clock=new THREE.Clock(), running=false, raf;
+    function frame(){
+      if(!running) return;
+      var t=clock.getElapsedTime();
+      group.rotation.y+=0.0035; group.rotation.x=Math.sin(t*0.3)*0.15;
+      wire.rotation.y-=0.0022; shell.rotation.y-=0.0012; shell.rotation.x+=0.0008;
+      var s=1+Math.sin(t*1.4)*0.04; group.scale.set(s,s,s);
+      p1.rotation.y+=0.0012; p2.rotation.y-=0.0009;
+      mx+=(tmx-mx)*0.05; my+=(tmy-my)*0.05;
+      camera.position.x=mx*0.9; camera.position.y=-my*0.9; camera.lookAt(0,0,0);
+      renderer.render(scene,camera); raf=requestAnimationFrame(frame);
+    }
+    function start(){ if(!running){ running=true; clock.getDelta(); frame(); } }
+    function stop(){ running=false; if(raf)cancelAnimationFrame(raf); }
+    window.addEventListener('resize',function(){ var w2=holder.clientWidth,h2=holder.clientHeight; if(w2&&h2){ camera.aspect=w2/h2; camera.updateProjectionMatrix(); renderer.setSize(w2,h2,false);} });
+    document.addEventListener('visibilitychange',function(){ if(document.hidden)stop(); else start(); });
+    if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(e){ e.isIntersecting?start():stop(); }); },{threshold:0.05}).observe(holder); }
+    else { start(); }
+    canvas.style.display='block';
+    var fb=holder.querySelector('.core-fallback'); if(fb) fb.style.display='none';
+    renderer.render(scene,camera);
+  }
+
+  /* boot */
+  function boot(){
+    try{ initAICore(); }catch(e){}
+    if(fancy){
+      gsap.set('#phone',{rotationY:-13,rotationX:6});
+      var ptl=gsap.timeline();
+      ptl.fromTo('#preFill',{width:'0%'},{width:'100%',duration:0.9,ease:'power2.inOut'},0)
+         .to('#preWord',{opacity:1,y:0,duration:0.5},0.1)
+         .to('#preMark',{scale:1.06,duration:0.5,yoyo:true,repeat:1,ease:'sine.inOut'},0.1)
+         .add(function(){killPre();},1.05)
+         .add(function(){ heroIn(); reveals(); if(hasST)ScrollTrigger.refresh(); },1.15);
+    } else { killPre(); heroMetrics(); advMetrics(); $$('[data-msg]').forEach(function(m){m.style.opacity='1';m.style.transform='none';}); }
+  }
+  if(document.readyState==='complete') boot(); else window.addEventListener('load',boot);
+  setTimeout(killPre,2800);
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"Hileon Budget Tracker",
+  "operatingSystem":"Android",
+  "applicationCategory":"FinanceApplication",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+  "url":"https://hileonapp.com",
+  "description":"Offline-first budgeting, business invoicing and project tracking. 150+ currencies, 14 languages. On-device AI insights, with live exchange rates when online."
+}
+</script>
+</body>
+</html>
