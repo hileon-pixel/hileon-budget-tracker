@@ -1,80 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Subscriber Rewards Program — Hileon Budget Tracker</title>
-  <meta name="description" content="Hileon Subscriber Rewards Program terms. Earn rewards for building consistent financial tracking habits."/>
-  <link rel="icon" type="image/png" href="../favicon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-    :root{--bg-deep:#0B0E14;--panel-glass:rgba(18,22,32,0.7);--panel-border:rgba(255,255,255,0.08);--text-pure:#FFFFFF;--text-estate:#94A3B8;--text-muted:#64748B;--accent:232,121,74;--accent-glow:rgba(232,121,74,0.15);--font-display:'Outfit',sans-serif;--font-sans:'Inter',sans-serif}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;background:var(--bg-deep);color:var(--text-pure);font-family:var(--font-sans)}
-    body{min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");pointer-events:none;z-index:999}
-    nav{position:fixed;top:0;left:0;width:100%;z-index:100;background:rgba(11,14,20,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--panel-border)}
-    .nav-c{display:flex;align-items:center;justify-content:space-between;height:72px;max-width:900px;margin:0 auto;padding:0 28px}
-    .logo{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--text-pure);text-decoration:none;display:flex;align-items:center;gap:8px}
-    .logo-dot{width:8px;height:8px;border-radius:50%;background:rgb(var(--accent));box-shadow:0 0 12px rgb(var(--accent))}
-    .nav-back{font-size:0.85rem;color:var(--text-estate);text-decoration:none;font-weight:600;transition:color 0.3s}
-    .nav-back:hover{color:rgb(var(--accent))}
-    .hero{padding:140px 28px 60px;text-align:center;position:relative;max-width:900px;margin:0 auto}
-    .hero::before{content:'';position:absolute;top:80px;left:50%;transform:translateX(-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent),0.08) 0%,transparent 70%);pointer-events:none}
-    .hero-icon{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,rgb(var(--accent)),rgba(var(--accent),0.7));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 8px 30px rgba(var(--accent),0.35)}
-    .hero-tag{font-size:0.75rem;font-weight:700;color:rgb(var(--accent));text-transform:uppercase;letter-spacing:2.5px;margin-bottom:12px}
-    .hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);font-weight:700;margin-bottom:12px;letter-spacing:-0.5px}
-    .hero-badge{display:inline-block;background:rgba(var(--accent),0.1);border:1px solid rgba(var(--accent),0.3);color:rgb(var(--accent));padding:6px 18px;border-radius:100px;font-size:0.75rem;font-weight:700}
-    .hero-intro{max-width:620px;margin:24px auto 0;font-size:0.95rem;color:var(--text-estate);line-height:1.8}
-    .hero-intro strong{color:rgb(var(--accent))}
-    .content{max-width:800px;margin:0 auto;padding:20px 28px 80px}
-    .section-label{font-size:0.7rem;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:3px;margin:48px 0 20px;display:flex;align-items:center;gap:12px}
-    .section-label::after{content:'';flex:1;height:1px;background:var(--panel-border)}
-    .card{background:var(--panel-glass);border:1px solid var(--panel-border);border-radius:24px;padding:28px;margin-bottom:14px;transition:border-color 0.3s,box-shadow 0.3s;animation:fadeUp 0.4s ease both}
-    .card:hover{border-color:rgba(var(--accent),0.25);box-shadow:0 8px 30px rgba(0,0,0,0.2)}
-    .card-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-    .card-ico{width:40px;height:40px;border-radius:14px;background:rgba(var(--accent),0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .card h2{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--text-pure)}
-    .card p{font-size:0.88rem;color:var(--text-estate);line-height:1.85;margin-bottom:10px}
-    .card p:last-child{margin-bottom:0}
-    .card ul{list-style:none;padding:0;margin:8px 0}
-    .card ul li{font-size:0.88rem;color:var(--text-estate);line-height:1.8;padding:6px 0 6px 22px;border-bottom:1px solid rgba(255,255,255,0.03);position:relative}
-    .card ul li:last-child{border-bottom:none}
-    .card ul li::before{content:'';position:absolute;left:4px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:rgb(var(--accent))}
-    .card strong{color:var(--text-pure)}
-    .highlight{background:rgba(var(--accent),0.08);border-left:3px solid rgb(var(--accent));border-radius:0 14px 14px 0;padding:14px 18px;margin:14px 0;font-size:0.88rem;color:var(--text-pure);font-weight:600;line-height:1.7}
-    .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
-    .tier-card{background:rgba(255,255,255,0.02);border:1px solid var(--panel-border);border-radius:16px;padding:20px 16px;text-align:center;transition:border-color 0.3s}
-    .tier-card:hover{border-color:rgba(var(--accent),0.3)}
-    .tier-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:6px}
-    .tier-days{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:rgb(var(--accent))}
-    .tier-sub{font-size:0.75rem;color:var(--text-estate);margin-top:4px}
-    .contact{background:rgba(0,0,0,0.4);border:1px solid var(--panel-border);border-radius:24px;padding:48px 28px;text-align:center;margin-top:20px}
-    .contact h3{font-family:var(--font-display);font-size:1.6rem;color:var(--text-pure);margin-bottom:8px}
-    .contact p{font-size:0.9rem;color:var(--text-muted);margin-bottom:20px}
-    .contact-btn{display:inline-flex;align-items:center;gap:10px;background:rgba(var(--accent),0.1);border:1px solid rgba(var(--accent),0.3);color:rgb(var(--accent));padding:12px 28px;border-radius:100px;font-size:0.9rem;font-weight:700;text-decoration:none;transition:background 0.2s}
-    .contact-btn:hover{background:rgba(var(--accent),0.2)}
-    .contact-loc{margin-top:12px;font-size:0.8rem;color:var(--text-muted)}
-    footer{border-top:1px solid var(--panel-border);padding:32px 28px;text-align:center;max-width:900px;margin:0 auto}
-    footer p{font-size:0.78rem;color:var(--text-muted);line-height:2}
-    footer a{color:rgb(var(--accent));text-decoration:none}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-    .card:nth-child(1){animation-delay:0.02s}.card:nth-child(2){animation-delay:0.04s}.card:nth-child(3){animation-delay:0.06s}
-    .card:nth-child(4){animation-delay:0.08s}.card:nth-child(5){animation-delay:0.10s}
-    @media(max-width:600px){.hero{padding:120px 20px 40px}.content{padding:16px 20px 60px}.card{padding:22px 20px}.contact{padding:36px 20px}.tier-grid{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Subscriber Rewards Program — Hileon Budget Tracker</title>
+<meta name="description" content="Hileon Subscriber Rewards Program terms. Earn rewards for building consistent financial tracking habits."/>
+<meta name="theme-color" content="#05080b"/>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+@view-transition{ navigation: auto; }
+:root{
+  --bg:#05080b;--ink:#f2f7f5;--ink-soft:#a6b4b1;--ink-mute:#67736f;
+  --emerald:#2be89b;--emerald-rgb:43,232,155;--emerald-deep:#0fb185;
+  --violet:#a78bfa;--violet-rgb:167,139,250;--gold:#e7b469;--gold-rgb:231,180,105;
+  --red:#f0476e;--red-rgb:240,71,110;--blue:75,163,232;
+  --glass:rgba(18,27,31,0.55);--line:rgba(255,255,255,0.08);--line-2:rgba(255,255,255,0.14);
+  --display:'Outfit',sans-serif;--body:'Hanken Grotesk',sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);--maxw:880px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;overflow-x:hidden;line-height:1.7;position:relative}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(var(--emerald-rgb),0.25);color:#fff}
+
+.bg-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:radial-gradient(120% 90% at 82% -8%,#0b1a22 0,transparent 55%),radial-gradient(110% 80% at 8% 112%,#0c1510 0,transparent 52%),linear-gradient(180deg,#05080b,#070d12 55%,#05080b)}
+.aurora{position:absolute;border-radius:50%;filter:blur(100px);opacity:.5}
+.a1{width:55vw;height:55vw;left:-12vw;top:-14vw;background:radial-gradient(circle,rgba(var(--emerald-rgb),0.20),transparent 65%);animation:d1 30s ease-in-out infinite}
+.a2{width:48vw;height:48vw;right:-12vw;top:34vh;background:radial-gradient(circle,rgba(var(--gold-rgb),0.16),transparent 65%);animation:d2 36s ease-in-out infinite}
+.a3{width:42vw;height:42vw;left:30vw;bottom:-22vw;background:radial-gradient(circle,rgba(var(--violet-rgb),0.12),transparent 60%);animation:d3 42s ease-in-out infinite}
+@keyframes d1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5vw,4vh) scale(1.1)}}
+@keyframes d2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,5vh) scale(1.08)}}
+@keyframes d3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4vw,-4vh) scale(1.12)}}
+.veins{position:absolute;inset:-8%;mix-blend-mode:screen;opacity:.5}
+.veins path{fill:none;stroke-width:1}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+nav{position:fixed;top:0;left:0;width:100%;z-index:100;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(7,12,17,0.72);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border-bottom-color:var(--line)}
+.nav-c{display:flex;align-items:center;justify-content:space-between;height:70px;max-width:1100px;margin:0 auto;padding:0 32px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:1.3rem;view-transition-name:brand}
+.brand .lg{width:36px;height:36px}
+.nav-r{display:flex;align-items:center;gap:18px}
+.nav-back{font-size:.85rem;font-weight:600;color:var(--ink-soft);transition:color .3s}
+.nav-back:hover{color:var(--emerald)}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--emerald);color:#04231a;font-family:var(--display);font-weight:700;font-size:.82rem;padding:10px 18px;border-radius:100px;box-shadow:0 8px 24px rgba(var(--emerald-rgb),0.28);transition:box-shadow .3s}
+.cta:hover{box-shadow:0 12px 30px rgba(var(--emerald-rgb),0.45)}
+.cta svg{width:14px;height:14px}
+
+.hero{position:relative;z-index:5;max-width:var(--maxw);margin:0 auto;padding:150px 32px 46px;text-align:center}
+.hero-glow{position:absolute;top:90px;left:50%;transform:translateX(-50%);width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(var(--emerald-rgb),0.10),transparent 70%);pointer-events:none}
+.hero-icon{position:relative;width:66px;height:66px;border-radius:20px;background:linear-gradient(135deg,var(--emerald-deep),rgba(var(--emerald-rgb),0.6));display:flex;align-items:center;justify-content:center;margin:0 auto 22px;box-shadow:0 12px 36px rgba(var(--emerald-rgb),0.35)}
+.hero-icon svg{width:30px;height:30px;color:#03130d}
+.hero-tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--emerald);margin-bottom:14px}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,3.1rem);letter-spacing:-.02em;margin-bottom:16px}
+.hero-badge{display:inline-block;background:rgba(var(--emerald-rgb),0.1);border:1px solid rgba(var(--emerald-rgb),0.3);color:var(--emerald);padding:7px 18px;border-radius:100px;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em}
+.hero-intro{max-width:600px;margin:22px auto 0;font-size:1rem;color:var(--ink-soft);line-height:1.8}
+.hero-intro strong{color:var(--emerald)}
+
+.content{position:relative;z-index:5;max-width:var(--maxw);margin:0 auto;padding:20px 32px 90px}
+.section-label{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.16em;margin:48px 0 18px;display:flex;align-items:center;gap:14px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--line)}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:28px;margin-bottom:14px;transition:opacity .7s var(--ease),transform .7s var(--ease),border-color .35s,box-shadow .35s}
+.card.reveal{opacity:0;transform:translateY(22px)}
+.card.reveal.in{opacity:1;transform:none}
+.card:hover{border-color:rgba(var(--emerald-rgb),0.3);box-shadow:0 14px 40px rgba(0,0,0,0.3)}
+.card-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.card-ico{width:42px;height:42px;border-radius:13px;background:rgba(var(--emerald-rgb),0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--emerald)}
+.card-ico svg{width:19px;height:19px}
+.card h2{font-family:var(--display);font-weight:600;font-size:1.16rem}
+.card p{font-size:.92rem;color:var(--ink-soft);line-height:1.85;margin-bottom:10px}
+.card p:last-child{margin-bottom:0}
+.card strong{color:var(--ink)}
+.card a{color:var(--emerald);font-weight:600}
+.card ul,.card ol{margin:8px 0;padding-left:0;list-style:none}
+.card ul li{font-size:.9rem;color:var(--ink-soft);line-height:1.75;padding:7px 0 7px 22px;border-bottom:1px solid rgba(255,255,255,0.04);position:relative}
+.card ul li:last-child{border-bottom:none}
+.card ul li::before{content:'';position:absolute;left:3px;top:15px;width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 8px rgba(var(--emerald-rgb),0.6)}
+.highlight{background:rgba(var(--emerald-rgb),0.08);border-left:3px solid var(--emerald);border-radius:0 12px 12px 0;padding:14px 18px;margin:14px 0;font-size:.9rem;color:var(--ink);font-weight:500;line-height:1.7}
+
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 4px}
+.tier-card{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:16px;padding:22px 16px;text-align:center;transition:border-color .3s,transform .3s var(--ease)}
+.tier-card:hover{border-color:rgba(var(--emerald-rgb),0.35);transform:translateY(-3px)}
+.tier-label{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);margin-bottom:8px}
+.tier-days{font-family:var(--display);font-weight:800;font-size:2.1rem;color:var(--emerald);line-height:1}
+.tier-sub{font-size:.76rem;color:var(--ink-soft);margin-top:6px}
+
+.contact{background:rgba(4,7,10,0.6);border:1px solid var(--line);border-radius:24px;padding:50px 28px;text-align:center;margin-top:22px;position:relative;overflow:hidden}
+.contact::before{content:'';position:absolute;inset:0;background:radial-gradient(70% 80% at 50% 0,rgba(var(--emerald-rgb),0.10),transparent 60%);pointer-events:none}
+.contact h3{position:relative;font-family:var(--display);font-weight:700;font-size:1.7rem;margin-bottom:8px}
+.contact p{position:relative;font-size:.92rem;color:var(--ink-mute);margin-bottom:22px}
+.contact-btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:rgba(var(--emerald-rgb),0.12);border:1px solid rgba(var(--emerald-rgb),0.4);color:var(--emerald);padding:13px 28px;border-radius:100px;font-weight:700;font-size:.92rem;transition:background .25s}
+.contact-btn:hover{background:rgba(var(--emerald-rgb),0.2)}
+.contact-btn svg{color:var(--emerald)}
+.contact-loc{position:relative;margin-top:14px;font-size:.8rem;color:var(--ink-mute)}
+
+footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:36px 32px;text-align:center;max-width:var(--maxw);margin:0 auto}
+footer p{font-size:.8rem;color:var(--ink-mute);line-height:2}
+footer a{color:var(--ink-soft)}
+footer a:hover{color:var(--emerald)}
+
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s}
+@media(prefers-reduced-motion:reduce){.aurora{animation:none}*{scroll-behavior:auto}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+@media(max-width:600px){.hero{padding:120px 22px 40px}.content{padding:16px 22px 60px}.card{padding:22px 20px}.contact{padding:40px 22px}.tier-grid{grid-template-columns:1fr}.nav-c{padding:0 22px}.nav-back{display:none}}
+</style>
 </head>
 <body>
 
-<nav><div class="nav-c">
-  <a href="https://hileonapp.com" class="logo"><span class="logo-dot"></span>Hileon</a>
-  <a href="https://hileonapp.com" class="nav-back">← Back to Home</a>
-</div></nav>
+<div class="bg-field" aria-hidden="true">
+  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
+  <svg class="veins" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgba(231,180,105,0)"/><stop offset=".5" stop-color="rgba(231,180,105,0.9)"/><stop offset="1" stop-color="rgba(231,180,105,0)"/></linearGradient></defs>
+    <path d="M-60,170 C300,70 520,360 820,235 C1080,130 1250,420 1520,300" stroke="url(#vg)"/>
+    <path d="M-60,640 C260,540 560,780 900,650 C1150,560 1330,810 1520,710" stroke="url(#vg)"/>
+    <path d="M1480,40 C1180,180 1320,460 1080,680 C900,840 980,930 880,1000" stroke="url(#vg)"/>
+  </svg>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav id="nav">
+  <div class="nav-c">
+    <a href="/" class="brand">
+      <svg class="lg" viewBox="0 0 120 96" fill="none" aria-hidden="true">
+        <path d="M40 14 L96 30 L88 52 L32 36 Z" fill="#3e92dc"/><path d="M30 20 L86 30 L80 50 L26 42 Z" fill="#5bb0ee"/>
+        <rect x="14" y="30" width="84" height="54" rx="14" fill="#1a2a3d"/><rect x="74" y="46" width="34" height="24" rx="9" fill="#ffffff"/>
+        <path d="M91 64 V52 M85.5 57 L91 50.5 L96.5 57" stroke="#1a2a3d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>Hileon
+    </a>
+    <div class="nav-r">
+      <a href="/" class="nav-back">← Back to Hileon</a>
+      <a href="https://play.google.com/store/apps/details?id=com.hileon.budgettracker" target="_blank" rel="noopener" class="cta">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3.5v17c0 .6.6 1 1.1.7l13.4-8.5c.5-.3.5-1 0-1.4L4.1 2.8C3.6 2.5 3 2.9 3 3.5z"/></svg>Get the app
+      </a>
+    </div>
+  </div>
+</nav>
 
 <div class="hero">
-  <div class="hero-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg></div>
+  <div class="hero-glow"></div>
+  <div class="hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg></div>
   <div class="hero-tag">Hileon Budget Tracker</div>
   <h1>Subscriber Rewards Program</h1>
   <div class="hero-badge">Terms · Effective June 2026</div>
@@ -85,7 +153,8 @@
 
   <div class="section-label">Program Rules</div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h2>1. Eligibility</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h2>1. Eligibility</h2></div>
     <p>To participate in the Subscriber Rewards Program, you must:</p>
     <ul>
       <li>Have an active paid subscription to any Hileon plan (Profile Pro, Business Pro, or Ultimate)</li>
@@ -100,14 +169,16 @@
     </div>
   </div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h2>2. How It Works</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h2>2. How It Works</h2></div>
     <p>The program operates on a <strong>weekly cycle</strong>. Each week, subscribers who meet the eligibility criteria are qualified for that week's reward. Qualification is tracked automatically through Cloud Backup — your app usage streak is recorded securely in your cloud account.</p>
     <p>When a reward period is active, you will see a progress indicator in the app showing your current streak. Upon qualifying, you will be notified and entered into the reward pool for that week.</p>
   </div>
 
-  <div class="section-label">Rewards & Distribution</div>
+  <div class="section-label">Rewards &amp; Distribution</div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><h2>3. Rewards & Payment</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><h2>3. Rewards &amp; Payment</h2></div>
     <p>Reward amounts and structure are determined by Hileon and may vary by subscription tier and promotional period. Rewards are distributed weekly to selected qualifiers via:</p>
     <ul>
       <li><strong>Zimbabwe:</strong> EcoCash mobile money transfer</li>
@@ -117,22 +188,26 @@
     <p>You are responsible for providing accurate payment details. Hileon is not liable for transfers sent to incorrect details provided by you.</p>
   </div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg></div><h2>4. Selection Process</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"/></svg></div><h2>4. Selection Process</h2></div>
     <p>Winners are selected from the pool of qualified subscribers each week. Selection may be based on engagement metrics (such as longest consecutive streak, most consistent usage, or breadth of features used) or by random draw among qualifiers, at Hileon's discretion. The selection method for each reward period will be communicated within the app.</p>
   </div>
 
-  <div class="section-label">Privacy & Legal</div>
+  <div class="section-label">Privacy &amp; Legal</div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h2>5. Data & Privacy</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h2>5. Data &amp; Privacy</h2></div>
     <p>Participation data collected includes: your subscription plan and dates, app usage dates (for streak verification), qualification status, and payment details you provide when claiming a reward. This data is stored securely in Firebase Firestore and is accessible only to you and Hileon administrators.</p>
-    <p>Your financial data (expenses, income, etc.) is never used for reward selection — only usage streak data is considered. Full details are in our <a href="https://hileonapp.com/privacy-policy" style="color:rgb(232,121,74);font-weight:600;">Privacy Policy</a>.</p>
+    <p>Your financial data (expenses, income, etc.) is never used for reward selection — only usage streak data is considered. Full details are in our <a href="/privacy-policy">Privacy Policy</a>.</p>
   </div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h2>6. Program Changes & Termination</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h2>6. Program Changes &amp; Termination</h2></div>
     <p>Hileon reserves the right to modify, suspend, or terminate the Subscriber Rewards Program at any time, with or without notice. Changes to reward amounts, eligibility criteria, or program structure may occur between reward periods. Continued participation after changes constitutes acceptance of the modified terms.</p>
   </div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div><h2>7. Disqualification</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div><h2>7. Disqualification</h2></div>
     <p>Hileon reserves the right to disqualify any participant who:</p>
     <ul>
       <li>Manipulates or attempts to manipulate streak data or usage metrics</li>
@@ -142,19 +217,36 @@
     </ul>
   </div>
 
-  <div class="card"><div class="card-head"><div class="card-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h2>8. General</h2></div>
+  <div class="card">
+    <div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h2>8. General</h2></div>
     <p>This program is a subscriber loyalty benefit offered by Hileon Budget Tracker and is not a sweepstake, lottery, or game of chance. It is not sponsored, endorsed, or administered by Google, Apple, Firebase, or any third party. Tax obligations on rewards are the sole responsibility of the recipient. These terms are governed by the laws of Zimbabwe.</p>
   </div>
 
   <div class="contact">
     <h3>Questions?</h3>
     <p>If you have questions about the Subscriber Rewards Program, contact us.</p>
-    <a href="mailto:support@hileonapp.com" class="contact-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgb(232,121,74)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>support@hileonapp.com</a>
-    <div class="contact-loc">Hileon</div>
+    <a href="mailto:support@hileonapp.com" class="contact-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      support@hileonapp.com
+    </a>
+    <div class="contact-loc">Hileon · Zimbabwe</div>
   </div>
 </div>
 
-<footer><p>© 2026 Hileon Budget Tracker · <a href="https://hileonapp.com">hileonapp.com</a> · <a href="https://hileonapp.com/privacy-policy">Privacy Policy</a></p></footer>
+<footer><p>© 2026 Hileon Budget Tracker · <a href="/">hileonapp.com</a> · <a href="/privacy-policy">Privacy Policy</a></p></footer>
 
+<script>
+(function(){
+  var nav=document.getElementById('nav');
+  function s(){ nav.classList.toggle('scrolled', (window.scrollY||window.pageYOffset)>20); }
+  s(); window.addEventListener('scroll',s,{passive:true});
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cards=[].slice.call(document.querySelectorAll('.card'));
+  if(!reduce && 'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.1,rootMargin:'0px 0px -8% 0px'});
+    cards.forEach(function(c,i){c.classList.add('reveal');c.style.transitionDelay=(Math.min(i,5)*0.04)+'s';io.observe(c);});
+  }
+})();
+</script>
 </body>
 </html>
