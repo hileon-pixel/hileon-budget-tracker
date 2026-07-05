@@ -385,6 +385,10 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
 .foot-nav{display:flex;gap:26px;flex-wrap:wrap}
 .foot-nav a{font-size:.82rem;color:var(--ink-mute);transition:color .3s}
 .foot-nav a:hover{color:var(--emerald)}
+.foot-badges{display:flex;justify-content:center;padding-bottom:28px}
+.foot-badges a{display:block;line-height:0;opacity:.9;transition:opacity .3s}
+.foot-badges a:hover{opacity:1}
+.foot-badges img{height:55px;width:auto;display:block;border-radius:6px}
 
 /* ═══════════ REDUCED MOTION ═══════════ */
 @media(prefers-reduced-motion:reduce){
@@ -836,6 +840,11 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
 
 <!-- ░░ FOOTER ░░ -->
 <footer>
+  <div class="wrap foot-badges">
+    <a href="https://saasbrowser.com/en/saas/1533105/hileon-budget-tracker" target="_blank" rel="noopener">
+      <img src="https://files.saasbrowser.com/kdlxyhe4y2rimpfjx2dsb2ron439" alt="Hileon Budget Tracker - Discover new software products verified badge" width="200" height="133" />
+    </a>
+  </div>
   <div class="wrap foot">
     <div class="foot-l">
       <svg class="lg" viewBox="0 0 120 96" fill="none" aria-hidden="true">
