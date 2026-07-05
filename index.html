@@ -315,6 +315,11 @@ h1 em{font-style:italic;font-weight:500;color:var(--emerald);text-shadow:0 0 38p
 
 /* ═══════════ LANGUAGES ═══════════ */
 .languages{padding:130px 0;text-align:center}
+.reviews{padding:100px 0;text-align:center}
+#saas-browser-reviews{max-width:920px;margin:0 auto}
+.reviews-cta{display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap;margin-top:36px}
+.reviews-cta a{font-family:var(--display);font-weight:700;font-size:.9rem;color:var(--emerald);transition:opacity .3s}
+.reviews-cta a:hover{opacity:.75}
 .lang-stage{display:grid;grid-template-columns:1fr;gap:0;justify-items:center}
 .lang-head{font-family:var(--display);font-weight:700;font-size:clamp(2rem,4.4vw,3.3rem);line-height:1.1;letter-spacing:-.02em;max-width:840px}
 .lang-head .swap{color:var(--emerald);text-shadow:0 0 34px rgba(var(--emerald-rgb),0.4);display:inline-block;transition:opacity .26s ease,transform .26s var(--ease);direction:ltr}
@@ -803,6 +808,21 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);padding:50px
     </div>
   </div>
 </section>
+
+<!-- ░░ REVIEWS ░░ -->
+<section class="reviews wrap" id="reviews">
+  <div class="sec-head" style="text-align:center">
+    <div class="eyebrow" data-r style="margin-left:auto;margin-right:auto"><span class="dot"></span>Trusted by users</div>
+    <h2 class="h2" data-r>What people are saying</h2>
+  </div>
+  <div id="saas-browser-reviews" data-r></div>
+  <div class="reviews-cta" data-r>
+    <a href="https://saasbrowser.com/en/saas/1533105/hileon-budget-tracker" target="_blank" rel="noopener">We're verified on SaaS Browser</a>
+    <a href="#" onclick="SaaSBrowser.requestReview(); return false;">Leave a Review</a>
+  </div>
+</section>
+<script src="https://assets.saasbrowser.com/widgets/display.min.js" data-profile="eb8f8181-d10d-4760-8a4c-9a1b5ac4f611" data-layout="carousel" data-mode="light" async></script>
+<script src="https://assets.saasbrowser.com/widgets/collection.min.js" data-profile="eb8f8181-d10d-4760-8a4c-9a1b5ac4f611" data-mode="light" data-position="left" async></script>
 
 <!-- ░░ DOWNLOAD ░░ -->
 <section class="download wrap" id="download">
