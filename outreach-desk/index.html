@@ -1,0 +1,458 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Hileon Outreach Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap">
+<style>
+/* Layout: navy desk header with today's count, then one column of prospect rows; the next action is the only filled button in each row. */
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#16283B; --soft:#56677A; --line:#D7DFE8;
+  --accent:#0A8F65; --on-accent:#FFFFFF; --head:#10243A; --head-ink:#FFFFFF; --head-soft:#B4C4D4; --head-line:#34506A;
+  --warn:#9A5B00; --warn-bg:#FFF3DC; --chip:#E7EEF5;
+  --display:"Outfit","Trebuchet MS",sans-serif; --body:"Hanken Grotesk","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1622; --surface:#132436; --ink:#E7EEF5; --soft:#9FB1C4; --line:#283C51;
+  --accent:#2BD890; --on-accent:#06281C; --head:#0F2236; --head-ink:#FFFFFF; --head-soft:#B4C4D4; --head-line:#34506A;
+  --warn:#F2C277; --warn-bg:#3A2C12; --chip:#1D3147; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1622; --surface:#132436; --ink:#E7EEF5; --soft:#9FB1C4; --line:#283C51;
+  --accent:#2BD890; --on-accent:#06281C; --head:#0F2236; --head-ink:#FFFFFF; --head-soft:#B4C4D4; --head-line:#34506A;
+  --warn:#F2C277; --warn-bg:#3A2C12; --chip:#1D3147; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--body)}
+.gut{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header{background:var(--head);color:var(--head-ink)}
+header .gut{padding-block:22px 20px}
+h1{font:800 26px/1.1 var(--display);margin:0}
+.today{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:16px}
+.today b{font:800 44px/1 var(--display);font-variant-numeric:tabular-nums}
+.today span{color:var(--head-soft)}
+.meter{height:6px;border-radius:3px;background:var(--head-line);margin-top:12px;overflow:hidden}
+.meter i{display:block;height:100%;background:#2BE89B;width:0;transition:width .3s}
+.sets{display:flex;gap:10px 18px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:var(--head-soft)}
+.sets label{display:flex;align-items:center;gap:6px}
+.sets select{background:transparent;border:1px solid var(--head-line);border-radius:7px;padding:4px 6px;color:var(--head-ink)}
+.sets option{color:#16283B}
+
+.counts{display:flex;flex-wrap:wrap;gap:6px 22px;padding-block:16px 4px;font-size:13.5px;color:var(--soft)}
+.counts b{color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-top:10px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font-weight:600;color:var(--soft);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+#q{width:100%;margin-top:14px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+.note{margin-top:14px;padding:10px 12px;border-radius:9px;background:var(--warn-bg);color:var(--warn);font-size:13.5px}
+.sec{font:700 16px var(--display);margin:22px 0 2px}
+.sec small{font:400 13px var(--body);color:var(--soft);margin-left:8px}
+
+.row{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:10px}
+.row.off{opacity:.62}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.top>div{min-width:0}
+.org{font-weight:700;font-size:16px;overflow-wrap:anywhere}
+.meta{font-size:13px;color:var(--soft)}
+.addr{font-size:13.5px;user-select:all;overflow-wrap:anywhere}
+.step{flex:none;font-size:12.5px;font-weight:600;background:var(--chip);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.btn{display:inline-block;border:1px solid var(--line);background:transparent;border-radius:9px;padding:8px 13px;font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--soft)}
+.btn.go{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.done{border-color:var(--accent);color:var(--accent)}
+.link{background:none;border:0;padding:6px 4px;color:var(--soft);font-size:13.5px;cursor:pointer;text-decoration:underline}
+details{margin-top:10px}
+summary{cursor:pointer;font-size:13.5px;color:var(--soft)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:400 13.5px/1.5 var(--body);background:var(--bg);border-radius:9px;padding:12px;margin:8px 0 0;user-select:text}
+.empty{padding:34px 0;color:var(--soft);text-align:center}
+.empty b{display:block;font:700 20px var(--display);color:var(--ink);margin-bottom:4px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--head);color:#fff;border-radius:10px;padding:10px 14px;font-size:14px;display:flex;gap:14px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:calc(100% - 32px)}
+#toast button{background:none;border:0;color:#2BE89B;font-weight:700;cursor:pointer}
+main{padding-bottom:90px}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+</style>
+
+<header><div class="gut">
+  <h1>Hileon Outreach Desk</h1>
+  <div class="today"><b id="nToday">0</b><span id="capTxt">of 30 sent today</span></div>
+  <div class="meter"><i id="bar"></i></div>
+  <div class="sets">
+    <label for="cap">Daily limit <select id="cap"><option>20</option><option selected>30</option><option>40</option><option>50</option></select></label>
+    <label for="mail">Send with <select id="mail"><option value="gmail">Gmail</option><option value="outlook">Outlook</option></select></label>
+    <label for="acct" id="acctL">Gmail account <select id="acct"><option value="0">1st signed in</option><option value="1">2nd</option><option value="2">3rd</option></select></label>
+  </div>
+</div></header>
+
+<main class="gut">
+  <div class="counts" id="counts"></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tToday" aria-selected="true">Today</button>
+    <button role="tab" id="tAll" aria-selected="false">Everyone</button>
+  </div>
+  <div class="note" id="note" hidden></div>
+  <input id="q" type="search" placeholder="Search organisation, country or address" hidden>
+  <div id="list"><div class="empty">Loading your progress…</div></div>
+</main>
+<div id="toast" hidden><span id="toastT"></span><button id="undo">Undo</button></div>
+
+<script>
+const P = [{"id":"caritas@caritas.am","e":"caritas@caritas.am","n":"Armenian Caritas team","o":"Armenian Caritas","p":"social protection, livelihoods and community development","ic":"in Armenia","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Armenia","w":1,"pr":1,"l":"en"},{"id":"redcross@redcross.ge","e":"redcross@redcross.ge","n":"Georgia Red Cross Society team","o":"Georgia Red Cross Society","p":"disaster resilience and community livelihoods","ic":"in Georgia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Georgia","w":1,"pr":1,"l":"en"},{"id":"info@camp.kg","e":"info@camp.kg","n":"CAMP Alatoo team","o":"CAMP Alatoo","p":"pastoralist livelihoods and sustainable agriculture","ic":"in Kyrgyzstan","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Kyrgyzstan","w":1,"pr":1,"l":"en"},{"id":"efca@efca.kg","e":"efca@efca.kg","n":"EFCA Kyrgyzstan team","o":"EFCA","p":"civil society support and social entrepreneurship","ic":"in Kyrgyzstan","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Kyrgyzstan","w":1,"pr":1,"l":"en"},{"id":"myanmar@brac.net","e":"myanmar@brac.net","n":"BRAC Myanmar team","o":"BRAC Myanmar","p":"microfinance and livelihoods development","ic":"in Myanmar","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Myanmar","w":1,"pr":1,"l":"en"},{"id":"info@gk1giving.com","e":"info@gk1giving.com","n":"Gawad Kalinga Community Development Foundation team","o":"Gawad Kalinga Community Development Foundation","p":"community-driven development and social enterprise support","ic":"in the Philippines","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Philippines","w":1,"pr":1,"l":"en"},{"id":"info@givedirectly.org","e":"info@givedirectly.org","n":"GiveDirectly team","o":"GiveDirectly","p":"direct cash transfers & poverty eradication","ic":"in Rwanda","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Rwanda","w":1,"pr":1,"l":"en"},{"id":"fao-kh@fao.org","e":"fao-kh@fao.org","n":"FAO Cambodia team","o":"FAO","p":"agricultural value chain modernization","ic":"in Cambodia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Cambodia","w":1,"pr":2,"l":"en"},{"id":"wfp.phnompenh@wfp.org","e":"wfp.phnompenh@wfp.org","n":"WFP Cambodia team","o":"WFP","p":"school feeding and smallholder agricultural support","ic":"in Cambodia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Cambodia","w":1,"pr":2,"l":"en"},{"id":"fao-co@fao.org","e":"fao-co@fao.org","n":"equipo de FAO Colombia","o":"FAO","p":"smallholder agricultural value chains","ic":"en Colombia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Colombia","w":1,"pr":2,"l":"es"},{"id":"wfp.bogota@wfp.org","e":"wfp.bogota@wfp.org","n":"equipo de PMA Colombia","o":"PMA","p":"migrant food security and cash-based transfers","ic":"en Colombia","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Colombia","w":1,"pr":2,"l":"es"},{"id":"info@redcrosseth.org","e":"info@redcrosseth.org","n":"Ethiopian Red Cross Society team","o":"Ethiopian Red Cross Society","p":"emergency relief and livelihoods recovery","ic":"in Ethiopia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Ethiopia","w":1,"pr":2,"l":"en"},{"id":"fao-et@fao.org","e":"fao-et@fao.org","n":"FAO Ethiopia team","o":"FAO","p":"emergency agriculture production and pastoralist support","ic":"in Ethiopia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Ethiopia","w":1,"pr":2,"l":"en"},{"id":"wfp.addisababa@wfp.org","e":"wfp.addisababa@wfp.org","n":"WFP Ethiopia team","o":"WFP","p":"emergency food assistance and productive safety net","ic":"in Ethiopia","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Ethiopia","w":1,"pr":2,"l":"en"},{"id":"fao-ge@fao.org","e":"fao-ge@fao.org","n":"FAO Georgia team","o":"FAO","p":"agricultural development and value chain support","ic":"in Georgia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Georgia","w":1,"pr":2,"l":"en"},{"id":"info@meda.org","e":"info@meda.org","n":"MEDA Ghana team","o":"MEDA","p":"greater rural opportunities for women (GROW)","ic":"in Ghana","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Ghana","w":1,"pr":2,"l":"en"},{"id":"wfp.guatemala@wfp.org","e":"wfp.guatemala@wfp.org","n":"equipo de PMA Guatemala","o":"PMA","p":"resilience building and cash-for-work","ic":"en Guatemala","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Guatemala","w":1,"pr":2,"l":"es"},{"id":"fao-ht@fao.org","e":"fao-ht@fao.org","n":"à l'équipe de FAO Haïti","o":"FAO","p":"agricultural production support and food security","ic":"en Haïti","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Haiti","w":1,"pr":2,"l":"fr"},{"id":"wfp.portauprince@wfp.org","e":"wfp.portauprince@wfp.org","n":"à l'équipe de PAM Haïti","o":"PAM","p":"emergency food assistance and cash transfers","ic":"en Haïti","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Haiti","w":1,"pr":2,"l":"fr"},{"id":"fao-id@fao.org","e":"fao-id@fao.org","n":"FAO Indonesia team","o":"FAO","p":"smallholder agricultural competitiveness and value chains","ic":"in Indonesia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Indonesia","w":1,"pr":2,"l":"en"},{"id":"pmi@pmi.or.id","e":"pmi@pmi.or.id","n":"Indonesian Red Cross Society team","o":"Indonesian Red Cross Society","p":"disaster relief, cash transfers and community resilience","ic":"in Indonesia","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Indonesia","w":1,"pr":2,"l":"en"},{"id":"wfp.jakarta@wfp.org","e":"wfp.jakarta@wfp.org","n":"WFP Indonesia team","o":"WFP","p":"food security and resilience building cash transfers","ic":"in Indonesia","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Indonesia","w":1,"pr":2,"l":"en"},{"id":"fao-ke@fao.org","e":"fao-ke@fao.org","n":"FAO Kenya team","o":"FAO","p":"smallholder agricultural production and resilience","ic":"in Kenya","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Kenya","w":1,"pr":2,"l":"en"},{"id":"info@kenyaredcross.org","e":"info@kenyaredcross.org","n":"Kenya Red Cross Society team","o":"Kenya Red Cross Society","p":"disaster management and cash-based interventions","ic":"in Kenya","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Kenya","w":1,"pr":2,"l":"en"},{"id":"wfp.nairobi@wfp.org","e":"wfp.nairobi@wfp.org","n":"WFP Kenya team","o":"WFP","p":"refugee operations and resilience cash transfers","ic":"in Kenya","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Kenya","w":1,"pr":2,"l":"en"},{"id":"fao-kg@fao.org","e":"fao-kg@fao.org","n":"FAO Kyrgyzstan team","o":"FAO","p":"livestock and crop productivity support","ic":"in Kyrgyzstan","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Kyrgyzstan","w":1,"pr":2,"l":"en"},{"id":"redcrescent@redcrescent.kg","e":"redcrescent@redcrescent.kg","n":"Red Crescent Society of Kyrgyzstan team","o":"Red Crescent Society of Kyrgyzstan","p":"community disaster risk reduction and livelihoods","ic":"in Kyrgyzstan","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Kyrgyzstan","w":1,"pr":2,"l":"en"},{"id":"wfp.bishkek@wfp.org","e":"wfp.bishkek@wfp.org","n":"WFP Kyrgyzstan team","o":"WFP","p":"resilience building and smallholder support","ic":"in Kyrgyzstan","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Kyrgyzstan","w":1,"pr":2,"l":"en"},{"id":"info@fintrust.mw","e":"info@fintrust.mw","n":"FinTrust Malawi team","o":"FinTrust Malawi","p":"microfinance and village banking support","ic":"in Malawi","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Malawi","w":1,"pr":2,"l":"en"},{"id":"nasfam@nasfam.org","e":"nasfam@nasfam.org","n":"NASFAM Malawi team","o":"NASFAM","p":"smallholder commercialisation & farmer association support","ic":"in Malawi","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Malawi","w":1,"pr":2,"l":"en"},{"id":"fao-md@fao.org","e":"fao-md@fao.org","n":"FAO Moldova team","o":"FAO","p":"smallholder agricultural productivity and markets","ic":"in Moldova","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Moldova","w":1,"pr":2,"l":"en"},{"id":"info@prisma.co.mz","e":"info@prisma.co.mz","n":"equipa da Prisma Micro Finance SA","o":"Prisma Micro Finance SA","p":"micro-enterprise lending and financial literacy","ic":"em Moçambique","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Mozambique","w":1,"pr":2,"l":"pt"},{"id":"unac@unac.org.mz","e":"unac@unac.org.mz","n":"equipa da UNAC Mozambique","o":"UNAC","p":"family farming and agro-ecology promotion","ic":"em Moçambique","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Mozambique","w":1,"pr":2,"l":"pt"},{"id":"fao-mm@fao.org","e":"fao-mm@fao.org","n":"FAO Myanmar team","o":"FAO","p":"agricultural livelihoods and food security support","ic":"in Myanmar","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Myanmar","w":1,"pr":2,"l":"en"},{"id":"wfp.yangon@wfp.org","e":"wfp.yangon@wfp.org","n":"WFP Myanmar team","o":"WFP","p":"emergency food and cash assistance","ic":"in Myanmar","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Myanmar","w":1,"pr":2,"l":"en"},{"id":"fao-ng@fao.org","e":"fao-ng@fao.org","n":"FAO Nigeria team","o":"FAO","p":"emergency livelihoods and agricultural support","ic":"in Nigeria","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Nigeria","w":1,"pr":2,"l":"en"},{"id":"info@redcrossnigeria.org","e":"info@redcrossnigeria.org","n":"Nigerian Red Cross Society team","o":"Nigerian Red Cross Society","p":"disaster management and community livelihoods","ic":"in Nigeria","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Nigeria","w":1,"pr":2,"l":"en"},{"id":"wfp.abuja@wfp.org","e":"wfp.abuja@wfp.org","n":"WFP Nigeria team","o":"WFP","p":"emergency food assistance and livelihoods recovery","ic":"in Nigeria","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Nigeria","w":1,"pr":2,"l":"en"},{"id":"info@redcross.org.pg","e":"info@redcross.org.pg","n":"Papua New Guinea Red Cross Society team","o":"Papua New Guinea Red Cross Society","p":"community resilience and livelihoods","ic":"in Papua New Guinea","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Papua New Guinea","w":1,"pr":2,"l":"en"},{"id":"fao-pe@fao.org","e":"fao-pe@fao.org","n":"equipo de FAO Perú","o":"FAO","p":"family farming and agricultural modernization","ic":"en Perú","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Peru","w":1,"pr":2,"l":"es"},{"id":"fao-ph@fao.org","e":"fao-ph@fao.org","n":"FAO Philippines team","o":"FAO","p":"sustainable agriculture and fishery livelihoods","ic":"in the Philippines","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Philippines","w":1,"pr":2,"l":"en"},{"id":"secgen@redcross.org.ph","e":"secgen@redcross.org.ph","n":"Philippine National Red Cross team","o":"Philippine National Red Cross","p":"community resilience and emergency cash assistance","ic":"in the Philippines","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Philippines","w":1,"pr":2,"l":"en"},{"id":"wfp.manila@wfp.org","e":"wfp.manila@wfp.org","n":"WFP Philippines team","o":"WFP","p":"emergency food assistance and early recovery cash transfers","ic":"in the Philippines","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Philippines","w":1,"pr":2,"l":"en"},{"id":"info@finmark.org.za","e":"info@finmark.org.za","n":"FinMark Trust team","o":"FinMark Trust","p":"SADC financial inclusion & digital savings groups initiative","ic":"in South Africa","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"South Africa","w":1,"pr":2,"l":"en"},{"id":"rcst@rcst.tj","e":"rcst@rcst.tj","n":"Red Crescent Society of Tajikistan team","o":"Red Crescent Society of Tajikistan","p":"community resilience and livelihoods support","ic":"in Tajikistan","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Tajikistan","w":1,"pr":2,"l":"en"},{"id":"wfp.dushanbe@wfp.org","e":"wfp.dushanbe@wfp.org","n":"WFP Tajikistan team","o":"WFP","p":"food security and disaster risk reduction cash-for-work","ic":"in Tajikistan","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Tajikistan","w":1,"pr":2,"l":"en"},{"id":"cvtl@cvtl.tl","e":"cvtl@cvtl.tl","n":"Timor-Leste Red Cross team","o":"Timor-Leste Red Cross","p":"community disaster risk reduction and livelihoods","ic":"in Timor-Leste","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Timor-Leste","w":1,"pr":2,"l":"en"},{"id":"wfp.dili@wfp.org","e":"wfp.dili@wfp.org","n":"WFP Timor-Leste team","o":"WFP","p":"resilience building and cash-based transfers","ic":"in Timor-Leste","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Timor-Leste","w":1,"pr":2,"l":"en"},{"id":"fao-ug@fao.org","e":"fao-ug@fao.org","n":"FAO Uganda team","o":"FAO","p":"agricultural value chain support and livelihoods","ic":"in Uganda","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Uganda","w":1,"pr":2,"l":"en"},{"id":"info@redcrossug.org","e":"info@redcrossug.org","n":"Uganda Red Cross Society team","o":"Uganda Red Cross Society","p":"disaster resilience and community livelihoods","ic":"in Uganda","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Uganda","w":1,"pr":2,"l":"en"},{"id":"wfp.kampala@wfp.org","e":"wfp.kampala@wfp.org","n":"WFP Uganda team","o":"WFP","p":"refugee cash-based transfers and asset creation","ic":"in Uganda","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Uganda","w":1,"pr":2,"l":"en"},{"id":"fao-ua@fao.org","e":"fao-ua@fao.org","n":"FAO Ukraine team","o":"FAO","p":"agricultural recovery and smallholder support","ic":"in Ukraine","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Ukraine","w":1,"pr":2,"l":"en"},{"id":"secretariat@redcross.org.ua","e":"secretariat@redcross.org.ua","n":"Ukrainian Red Cross Society team","o":"Ukrainian Red Cross Society","p":"disaster management and humanitarian cash assistance","ic":"in Ukraine","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Ukraine","w":1,"pr":2,"l":"en"},{"id":"wfp.kyiv@wfp.org","e":"wfp.kyiv@wfp.org","n":"WFP Ukraine team","o":"WFP","p":"emergency food security and cash assistance","ic":"in Ukraine","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Ukraine","w":1,"pr":2,"l":"en"},{"id":"znfu@znfu.org.zm","e":"znfu@znfu.org.zm","n":"ZNFU Zambia team","o":"ZNFU","p":"lima credit scheme & smallholder farmer support","ic":"in Zambia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Zambia","w":1,"pr":2,"l":"en"},{"id":"drc@drc.ngo","e":"drc@drc.ngo","n":"DRC team","o":"DRC","p":"economic recovery and cash consortium coordination","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / Denmark","w":2,"pr":1,"l":"en"},{"id":"paris@acted.org","e":"paris@acted.org","n":"Acted team","o":"Acted","p":"emergency relief, cash transfers and micro-enterprise support","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / France","w":2,"pr":1,"l":"en"},{"id":"info@actionagainsthunger.org","e":"info@actionagainsthunger.org","n":"Action Against Hunger team","o":"Action Against Hunger","p":"food security, livelihoods and nutrition cash assistance","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / France","w":2,"pr":1,"l":"en"},{"id":"fao-hq@fao.org","e":"fao-hq@fao.org","n":"FAO team","o":"FAO","p":"smallholder agricultural productivity and food security","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / Italy","w":2,"pr":1,"l":"en"},{"id":"wfpinfo@wfp.org","e":"wfpinfo@wfp.org","n":"WFP team","o":"WFP","p":"cash-based transfers (CBT) and resilience strategy","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / Italy","w":2,"pr":1,"l":"en"},{"id":"icrc@icrc.org","e":"icrc@icrc.org","n":"ICRC team","o":"ICRC","p":"humanitarian assistance and economic security","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / Switzerland","w":2,"pr":1,"l":"en"},{"id":"secretariat@ifrc.org","e":"secretariat@ifrc.org","n":"IFRC team","o":"IFRC","p":"disaster relief, cash and voucher assistance (CVA) & resilience","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / Switzerland","w":2,"pr":1,"l":"en"},{"id":"oxfam@oxfam.org","e":"oxfam@oxfam.org","n":"Oxfam team","o":"Oxfam","p":"livelihoods, fair trade and cash-based interventions","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / UK","w":2,"pr":1,"l":"en"},{"id":"info@plan-international.org","e":"info@plan-international.org","n":"Plan International team","o":"Plan International","p":"youth economic empowerment and financial literacy","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / UK","w":2,"pr":1,"l":"en"},{"id":"wvi_info@wvi.org","e":"wvi_info@wvi.org","n":"World Vision International team","o":"World Vision International","p":"livelihoods, savings groups and humanitarian cash transfers","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / UK","w":2,"pr":1,"l":"en"},{"id":"information@crs.org","e":"information@crs.org","n":"CRS team","o":"CRS","p":"livelihoods, savings internal lending communities (SILC) & agriculture","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / US","w":2,"pr":1,"l":"en"},{"id":"ngocap@unicef.org","e":"ngocap@unicef.org","n":"UNICEF team","o":"UNICEF","p":"social protection, cash transfers and child livelihoods","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / US","w":2,"pr":1,"l":"en"},{"id":"info@unops.org","e":"info@unops.org","n":"UNOPS team","o":"UNOPS","p":"infrastructure, procurement and project management services","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / Denmark","w":2,"pr":2,"l":"en"},{"id":"avsf@avsf.org","e":"avsf@avsf.org","n":"AVSF team","o":"AVSF","p":"family farming, agro-ecology and pastoralism","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / France","w":2,"pr":2,"l":"en"},{"id":"cgiar@cgiar.org","e":"cgiar@cgiar.org","n":"CGIAR team","o":"CGIAR","p":"agricultural research for development and smallholder innovation","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / France","w":2,"pr":2,"l":"en"},{"id":"info@gfa-group.de","e":"info@gfa-group.de","n":"GFA Consulting Group team","o":"GFA Consulting Group","p":"international development consulting and project implementation","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / Germany","w":2,"pr":2,"l":"en"},{"id":"info@giz.de","e":"info@giz.de","n":"GIZ team","o":"GIZ","p":"sustainable development and economic cooperation","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / Germany","w":2,"pr":2,"l":"en"},{"id":"wfp.innovation@wfp.org","e":"wfp.innovation@wfp.org","n":"WFP Innovation Accelerator team","o":"WFP Innovation Accelerator","p":"humanitarian innovation and scaling tech solutions","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / Germany","w":2,"pr":2,"l":"en"},{"id":"kontakt@welthungerhilfe.de","e":"kontakt@welthungerhilfe.de","n":"WHH team","o":"WHH","p":"food security, agriculture and cash assistance","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / Germany","w":2,"pr":2,"l":"en"},{"id":"info@concern.net","e":"info@concern.net","n":"Concern Worldwide team","o":"Concern Worldwide","p":"extreme poverty graduation and livelihoods","ic":"in several countries","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Global / Ireland","w":2,"pr":2,"l":"en"},{"id":"ifad@ifad.org","e":"ifad@ifad.org","n":"IFAD team","o":"IFAD","p":"rural poverty reduction, smallholder financing and value chains","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / Italy","w":2,"pr":2,"l":"en"},{"id":"info@near.ngo","e":"info@near.ngo","n":"NEAR Network team","o":"NEAR Network","p":"locally-led humanitarian and development action","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / Kenya","w":2,"pr":2,"l":"en"},{"id":"unhabitat-info@un.org","e":"unhabitat-info@un.org","n":"UN-Habitat team","o":"UN-Habitat","p":"urban basic services, participatory slum upgrading and livelihoods","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / Kenya","w":2,"pr":2,"l":"en"},{"id":"unep-news@un.org","e":"unep-news@un.org","n":"UNEP team","o":"UNEP","p":"environment facility (GEF) community-based adaptation projects","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / Kenya","w":2,"pr":2,"l":"en"},{"id":"info@solidaridadnetwork.org","e":"info@solidaridadnetwork.org","n":"Solidaridad Network team","o":"Solidaridad Network","p":"sustainable supply chains and smallholder support","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / Netherlands","w":2,"pr":2,"l":"en"},{"id":"info@helvetas.org","e":"info@helvetas.org","n":"Helvetas Swiss Intercooperation team","o":"Helvetas Swiss Intercooperation","p":"rural development, sustainable agriculture and green economy","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / Switzerland","w":2,"pr":2,"l":"en"},{"id":"innovation@unhcr.org","e":"innovation@unhcr.org","n":"UNHCR Innovation Service team","o":"UNHCR Innovation Service","p":"humanitarian innovation and digital tools for displaced populations","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / Switzerland","w":2,"pr":2,"l":"en"},{"id":"start@startnetwork.org","e":"start@startnetwork.org","n":"Start Network team","o":"Start Network","p":"start fund, anticipatory action and locally-led crisis response","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / UK","w":2,"pr":2,"l":"en"},{"id":"info@heifer.org","e":"info@heifer.org","n":"Heifer International team","o":"Heifer International","p":"passing on the gift, sustainable agriculture and cooperatives","ic":"in several countries","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Global / US","w":2,"pr":2,"l":"en"},{"id":"info.headquarters@unwomen.org","e":"info.headquarters@unwomen.org","n":"UN Women team","o":"UN Women","p":"women's economic empowerment and gender equality","ic":"in several countries","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Global / US","w":2,"pr":2,"l":"en"},{"id":"info@uncdf.org","e":"info@uncdf.org","n":"UNCDF team","o":"UNCDF","p":"inclusive finance and local economic development","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / US","w":2,"pr":2,"l":"en"},{"id":"aywa@aywa.am","e":"aywa@aywa.am","n":"AYWA Armenia team","o":"AYWA","p":"women's entrepreneurship and livelihoods support","ic":"in Armenia","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Armenia","w":3,"pr":3,"l":"en"},{"id":"epf@epf.am","e":"epf@epf.am","n":"EPF Armenia team","o":"EPF","p":"civil society capacity building and social enterprise","ic":"in Armenia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Armenia","w":3,"pr":3,"l":"en"},{"id":"info@fcfo-cambodia.org","e":"info@fcfo-cambodia.org","n":"FCFO Cambodia team","o":"FCFO","p":"agricultural cooperative federation network","ic":"in Cambodia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Cambodia","w":3,"pr":3,"l":"en"},{"id":"ngoforum@ngoforum.org.kh","e":"ngoforum@ngoforum.org.kh","n":"NGO Forum on Cambodia team","o":"NGO Forum on Cambodia","p":"civil society network & community development support","ic":"in Cambodia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Cambodia","w":3,"pr":3,"l":"en"},{"id":"info@pratthanasalan.com","e":"info@pratthanasalan.com","n":"PADECO Cambodia team","o":"PADECO","p":"rural microfinance and small enterprise loans","ic":"in Cambodia","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Cambodia","w":3,"pr":3,"l":"en"},{"id":"asobancaria@asobancaria.com","e":"asobancaria@asobancaria.com","n":"equipo de ASOBANCARIA","o":"ASOBANCARIA","p":"financial inclusion and banking literacy initiative","ic":"en Colombia","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Colombia","w":3,"pr":3,"l":"es"},{"id":"cinep@cinep.org.co","e":"cinep@cinep.org.co","n":"equipo de CINEP Colombia","o":"CINEP","p":"community development and social justice","ic":"en Colombia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Colombia","w":3,"pr":3,"l":"es"},{"id":"confecoop@confecoop.coop","e":"confecoop@confecoop.coop","n":"equipo de Confederación de Cooperativas de Colombia","o":"Confederación de Cooperativas de Colombia","p":"cooperative sector union & capacity building","ic":"en Colombia","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Colombia","w":3,"pr":3,"l":"es"},{"id":"esquel@esquel.org.ec","e":"esquel@esquel.org.ec","n":"equipo de Fundación Esquel","o":"Fundación Esquel","p":"community development and local governance","ic":"en Ecuador","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Ecuador","w":3,"pr":3,"l":"es"},{"id":"info@csi.ge","e":"info@csi.ge","n":"CSI Georgia team","o":"CSI","p":"local democracy and community development","ic":"in Georgia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Georgia","w":3,"pr":3,"l":"en"},{"id":"caritas@caritas.ge","e":"caritas@caritas.ge","n":"Caritas Georgia team","o":"Caritas Georgia","p":"social services and community livelihoods","ic":"in Georgia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Georgia","w":3,"pr":3,"l":"en"},{"id":"info@gfa.org.ge","e":"info@gfa.org.ge","n":"GFA Georgia team","o":"GFA","p":"agribusiness cooperatives support","ic":"in Georgia","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Georgia","w":3,"pr":3,"l":"en"},{"id":"info@afi-global.org","e":"info@afi-global.org","n":"AFI team","o":"AFI","p":"policy leadership on financial inclusion and digital finance","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / Malaysia","w":3,"pr":3,"l":"en"},{"id":"info@asa-international.com","e":"info@asa-international.com","n":"ASA International Group plc team","o":"ASA International Group plc","p":"microfinance operations across asia and africa","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / UK","w":3,"pr":3,"l":"en"},{"id":"info@calpnetwork.org","e":"info@calpnetwork.org","n":"CALP Network team","o":"CALP Network","p":"cash and voucher assistance (CVA) capacity building and standards","ic":"in several countries","f":"People can plan each transfer before it arrives, log spending in seconds or from a receipt photo, and see how much is left before the next payment.","c":"Global / UK","w":3,"pr":3,"l":"en"},{"id":"info@startnetwork.org","e":"info@startnetwork.org","n":"NEAR / Start Network Localisation Fund Partners team","o":"NEAR / Start Network Localisation Fund Partners","p":"locally-led humanitarian financing and grant management","ic":"in several countries","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Global / UK","w":3,"pr":3,"l":"en"},{"id":"info@visionfund.org","e":"info@visionfund.org","n":"VisionFund International team","o":"VisionFund International","p":"microfinance network and small enterprise lending","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / UK","w":3,"pr":3,"l":"en"},{"id":"info@finca.org","e":"info@finca.org","n":"FINCA International team","o":"FINCA International","p":"microfinance, social enterprise and economic development","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / US","w":3,"pr":3,"l":"en"},{"id":"cgap@worldbank.org","e":"cgap@worldbank.org","n":"Microfinance Gateway / CGAP team","o":"Microfinance Gateway / CGAP","p":"financial inclusion research, policy and digital finance","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / US","w":3,"pr":3,"l":"en"},{"id":"info@womensworldbanking.org","e":"info@womensworldbanking.org","n":"Women's World Banking team","o":"Women's World Banking","p":"women's financial inclusion and leadership","ic":"in several countries","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Global / US","w":3,"pr":3,"l":"en"},{"id":"info@agexport.org.gt","e":"info@agexport.org.gt","n":"equipo de AGEXPORT Guatemala","o":"AGEXPORT","p":"smallholder agricultural export cooperatives support","ic":"en Guatemala","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Guatemala","w":3,"pr":3,"l":"es"},{"id":"fundap@fundap.org.gt","e":"fundap@fundap.org.gt","n":"equipo de FUNDAP Guatemala","o":"FUNDAP","p":"microfinance, handicrafts and rural development","ic":"en Guatemala","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Guatemala","w":3,"pr":3,"l":"es"},{"id":"redcamif@redcamif.org","e":"redcamif@redcamif.org","n":"equipo de REDCAMIF Honduras","o":"REDCAMIF","p":"central american microfinance network support","ic":"en Honduras","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Honduras","w":3,"pr":3,"l":"es"},{"id":"aman@aman.or.id","e":"aman@aman.or.id","n":"AMAN Indonesia team","o":"AMAN","p":"indigenous peoples community empowerment and livelihoods","ic":"in Indonesia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Indonesia","w":3,"pr":3,"l":"en"},{"id":"info@dompetdhuafa.org","e":"info@dompetdhuafa.org","n":"DOMPET DHUAFA team","o":"DOMPET DHUAFA","p":"economic empowerment and micro-enterprise development","ic":"in Indonesia","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Indonesia","w":3,"pr":3,"l":"en"},{"id":"info@kopernik.info","e":"info@kopernik.info","n":"Kopernik Indonesia team","o":"Kopernik","p":"tech-driven livelihoods and small enterprise support","ic":"in Indonesia","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Indonesia","w":3,"pr":3,"l":"en"},{"id":"info@bcc.kz","e":"info@bcc.kz","n":"BCC Bank Kazakhstan team","o":"BCC Bank Kazakhstan","p":"SME and micro-enterprise financing","ic":"in Kazakhstan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Kazakhstan","w":3,"pr":3,"l":"en"},{"id":"finca@finca.kg","e":"finca@finca.kg","n":"FINCA Kyrgyzstan team","o":"FINCA Kyrgyzstan","p":"micro-enterprise lending and financial literacy","ic":"in Kyrgyzstan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Kyrgyzstan","w":3,"pr":3,"l":"en"},{"id":"info@oxus.kg","e":"info@oxus.kg","n":"Oxus Kyrgyzstan team","o":"Oxus Kyrgyzstan","p":"microfinance and small business development","ic":"in Kyrgyzstan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Kyrgyzstan","w":3,"pr":3,"l":"en"},{"id":"contact@contact.md","e":"contact@contact.md","n":"CONTACT Center Moldova team","o":"CONTACT Center Moldova","p":"civil society support and citizen participation","ic":"in Moldova","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Moldova","w":3,"pr":3,"l":"en"},{"id":"caritas@caritas.md","e":"caritas@caritas.md","n":"Caritas Moldova team","o":"Caritas Moldova","p":"social welfare and community support","ic":"in Moldova","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Moldova","w":3,"pr":3,"l":"en"},{"id":"info@maib.md","e":"info@maib.md","n":"Moldova Agroindbank SME Support team","o":"Moldova Agroindbank SME Support","p":"SME and micro-enterprise financial literacy","ic":"in Moldova","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Moldova","w":3,"pr":3,"l":"en"},{"id":"info@myanmarfarmer.org","e":"info@myanmarfarmer.org","n":"Myanmar Apex Farmers Association / Farmer Cooperatives Network team","o":"Myanmar Apex Farmers Association / Farmer Cooperatives Network","p":"smallholder farmer cooperative support","ic":"in Myanmar","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Myanmar","w":3,"pr":3,"l":"en"},{"id":"info@myanmarinterfaith.org","e":"info@myanmarinterfaith.org","n":"Myanmar Interfaith Network / Local Civil Society Network team","o":"Myanmar Interfaith Network / Local Civil Society Network","p":"community development and livelihoods support","ic":"in Myanmar","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Myanmar","w":3,"pr":3,"l":"en"},{"id":"info@pngcoffeecoop.org","e":"info@pngcoffeecoop.org","n":"PNG Coffee Cooperative Federation team","o":"PNG Coffee Cooperative Federation","p":"smallholder coffee producers cooperative support","ic":"in Papua New Guinea","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Papua New Guinea","w":3,"pr":3,"l":"en"},{"id":"asomif@asomif.org.pe","e":"asomif@asomif.org.pe","n":"equipo de ASOMIF Peru","o":"ASOMIF Peru","p":"association of microfinance institutions peru","ic":"en Perú","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Peru","w":3,"pr":3,"l":"es"},{"id":"desco@desco.org.pe","e":"desco@desco.org.pe","n":"equipo de DESCO Perú","o":"DESCO","p":"development and smallholder support","ic":"en Perú","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Peru","w":3,"pr":3,"l":"es"},{"id":"info@asaphilippines.org","e":"info@asaphilippines.org","n":"ASA Philippines Foundation team","o":"ASA Philippines Foundation","p":"microfinance and livelihoods","ic":"in the Philippines","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Philippines","w":3,"pr":3,"l":"en"},{"id":"cardbank@cardmri.com","e":"cardbank@cardmri.com","n":"CARD Bank team","o":"CARD Bank","p":"microfinance, savings and smallholder agricultural lending","ic":"in the Philippines","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Philippines","w":3,"pr":3,"l":"en"},{"id":"phildhrra@phildhrra.net","e":"phildhrra@phildhrra.net","n":"Philippine Partnership for the Development of Human Resources in Rural Areas team","o":"Philippine Partnership for the Development of Human Resources in Rural Areas","p":"agrarian reform, smallholder farmers and livelihoods","ic":"in the Philippines","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Philippines","w":3,"pr":3,"l":"en"},{"id":"rimisp@rimisp.org","e":"rimisp@rimisp.org","n":"equipo de RIMISP","o":"RIMISP","p":"rural territorial development research and practice","ic":"en la región","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"Regional / Chile","w":3,"pr":3,"l":"es"},{"id":"clac@clac-comerciojusto.org","e":"clac@clac-comerciojusto.org","n":"equipo de CLAC","o":"CLAC","p":"fair trade smallholder cooperatives network","ic":"en la región","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Regional / El Salvador","w":3,"pr":3,"l":"es"},{"id":"info@ruralwomensassembly.org","e":"info@ruralwomensassembly.org","n":"RWA South Africa team","o":"RWA","p":"rural women's economic empowerment & cooperatives","ic":"in South Africa","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"South Africa","w":3,"pr":3,"l":"en"},{"id":"info@southernafricatrust.org","e":"info@southernafricatrust.org","n":"Southern Africa Trust team","o":"Southern Africa Trust","p":"inclusive growth and informal economy support","ic":"in South Africa","f":"Small traders get sales, expenses, stock and invoices in one place, kept apart from household money, with the profit margin on the home screen.","c":"South Africa","w":3,"pr":3,"l":"en"},{"id":"humo@humo.tj","e":"humo@humo.tj","n":"Humo Microloan Organization team","o":"Humo Microloan Organization","p":"micro-enterprise and rural lending","ic":"in Tajikistan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Tajikistan","w":3,"pr":3,"l":"en"},{"id":"info@imon.tj","e":"info@imon.tj","n":"Microcredit Deposit-Taking Organization IMON International team","o":"Microcredit Deposit-Taking Organization IMON International","p":"microfinance and small enterprise lending","ic":"in Tajikistan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Tajikistan","w":3,"pr":3,"l":"en"},{"id":"info@oxus.tj","e":"info@oxus.tj","n":"Oxus Tajikistan team","o":"Oxus Tajikistan","p":"micro-enterprise and agricultural microfinance","ic":"in Tajikistan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Tajikistan","w":3,"pr":3,"l":"en"},{"id":"tanzania@brac.net","e":"tanzania@brac.net","n":"BRAC Tanzania team","o":"BRAC Tanzania","p":"microfinance and livelihoods development","ic":"in Tanzania","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Tanzania","w":3,"pr":3,"l":"en"},{"id":"info@balinh.tl","e":"info@balinh.tl","n":"Ba Linh Cooperative Union team","o":"Ba Linh Cooperative Union","p":"coffee and agricultural producers cooperative support","ic":"in Timor-Leste","f":"Farmers can record input costs, harvest sales and stock, and see the profit of each season on one screen.","c":"Timor-Leste","w":3,"pr":3,"l":"en"},{"id":"info@laohamutuk.org","e":"info@laohamutuk.org","n":"La'o Hamutuk team","o":"La'o Hamutuk","p":"civil society monitoring and community development","ic":"in Timor-Leste","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Timor-Leste","w":3,"pr":3,"l":"en"},{"id":"uganda@brac.net","e":"uganda@brac.net","n":"BRAC Uganda team","o":"BRAC Uganda","p":"ultra-poor graduation and microfinance","ic":"in Uganda","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Uganda","w":3,"pr":3,"l":"en"},{"id":"info@agrobank.uz","e":"info@agrobank.uz","n":"Agrobank Uzbekistan team","o":"Agrobank Uzbekistan","p":"agricultural micro-lending and farmer support","ic":"in Uzbekistan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Uzbekistan","w":3,"pr":3,"l":"en"},{"id":"info@ipakyulibank.uz","e":"info@ipakyulibank.uz","n":"JSC Ipak Yuli Bank team","o":"JSC Ipak Yuli Bank","p":"small business and micro-enterprise financing","ic":"in Uzbekistan","f":"Members can track their savings, money lent and borrowed with repayments, and set limits for each spending category.","c":"Uzbekistan","w":3,"pr":3,"l":"en"},{"id":"info@malnutritionmatters.org","e":"info@malnutritionmatters.org","n":"Malnutrition Matters team","o":"Malnutrition Matters","p":"community nutrition and livelihoods integration","ic":"in Zambia","f":"Committees can run a project with a budget, phases and a record of every contribution, so everyone can see where the money went.","c":"Zambia","w":3,"pr":3,"l":"en"}];
+const PLAY = "https://play.google.com/store/apps/details?id=com.hileon.budgettracker";
+const GUIDE = "https://hileonapp.com/programmes";
+const SIG = "Terrence Kagurabadza\n";
+
+const T = {
+en:{name:"English",subj:"When the money runs out before the month does",
+ e1:r=>`Hi ${r.n},
+
+I came across ${r.o}'s work on ${r.p} ${r.ic}.
+
+In nine years of monitoring, evaluation and learning on humanitarian and development programmes, I kept hearing the same things from participants: the money runs out before the next payment, they can't say where it went, and household and business money end up mixed together. So I built Hileon Budget Tracker.
+
+It's an Android app that works offline, in 14 languages and 150+ currencies. ${r.f} The essentials are free, with no ads, and every record stays private on the person's own phone.
+
+It could be a simple way to turn financial-literacy training into a daily habit. Here it is on Google Play:
+${PLAY}
+
+If it's useful, please share it with your team or participants, and reply with any questions.
+
+Terrence Kagurabadza
+Founder, Hileon
+support@hileonapp.com | hileonapp.com
+
+P.S. If this isn't relevant to you, just reply "no thanks" and I won't write again.`,
+ e2:r=>`Hi ${r.n},
+
+A quick follow-up with a short guide you can pass to your team:
+${GUIDE}
+
+The three problems Hileon solves most often:
+- Money running out early: a monthly budget, a limit per category and an early warning while there's still time to adjust.
+- No record of where it went: spending logged in seconds, or straight from a receipt photo, with clear charts by month.
+- Mixed household and business money: separate Personal and Business books, with the profit margin always on screen.
+
+New users get every feature free for their first 7 days:
+${PLAY}
+
+If the timing isn't right, who on your team would be better to send this to?
+
+Terrence`,
+ e3:r=>`Hi ${r.n},
+
+I'll leave it here after this one.
+
+If Hileon could help ${r.o}'s participants keep track of their money, the app is free to install and share:
+${PLAY}
+
+Any questions, just reply. Thank you for the work you do ${r.ic}.
+
+Terrence
+support@hileonapp.com`},
+fr:{name:"French",subj:"Quand l'argent s'épuise avant la fin du mois",
+ e1:r=>`Bonjour ${r.n},
+
+J'ai découvert le travail de ${r.o} ${r.ic}.
+
+En neuf ans de suivi, évaluation et apprentissage sur des programmes humanitaires et de développement, j'ai souvent entendu les mêmes choses : l'argent s'épuise avant le prochain paiement, les gens ne savent pas où il est passé, et l'argent du ménage se mélange à celui de l'activité. J'ai donc créé Hileon Budget Tracker.
+
+C'est une application Android qui fonctionne hors ligne, en 14 langues et plus de 150 devises. Elle aide à planifier chaque montant reçu, à noter les dépenses en quelques secondes ou à partir d'une photo de reçu, et à séparer le budget du ménage de celui de l'activité. L'essentiel est gratuit, sans publicité, et les données restent privées sur le téléphone de chacun.
+
+Elle peut aider à transformer la formation en éducation financière en habitude quotidienne. La voici sur Google Play :
+${PLAY}
+
+Si elle vous semble utile, n'hésitez pas à la partager avec votre équipe ou vos participants, et à me répondre pour toute question.
+
+Terrence Kagurabadza
+Fondateur, Hileon
+support@hileonapp.com | hileonapp.com
+
+P.S. Si ce n'est pas pertinent pour vous, répondez simplement « non merci » et je ne vous écrirai plus.`,
+ e2:r=>`Bonjour ${r.n},
+
+Je reviens vers vous avec un court guide à transmettre à votre équipe :
+${GUIDE}
+
+Les trois problèmes que Hileon résout le plus souvent :
+- L'argent qui s'épuise trop tôt : un budget mensuel, une limite par catégorie et une alerte tant qu'il est encore temps d'ajuster.
+- Aucune trace des dépenses : chaque dépense notée en quelques secondes, ou à partir d'une photo du reçu, avec des graphiques clairs par mois.
+- L'argent du ménage mélangé à celui de l'activité : des comptes Personnel et Entreprise séparés, avec la marge toujours visible.
+
+Les nouveaux utilisateurs ont accès à toutes les fonctions gratuitement pendant 7 jours :
+${PLAY}
+
+Si ce message ne vous concerne pas directement, à qui dans votre équipe puis-je l'adresser ?
+
+Terrence`,
+ e3:r=>`Bonjour ${r.n},
+
+Ce sera mon dernier message.
+
+Si Hileon peut aider les participants de ${r.o} à suivre leur argent, l'application est gratuite à installer et à partager :
+${PLAY}
+
+Pour toute question, répondez simplement à ce message. Merci pour le travail que vous menez ${r.ic}.
+
+Terrence
+support@hileonapp.com`},
+pt:{name:"Portuguese",subj:"Quando o dinheiro acaba antes do fim do mês",
+ e1:r=>`Olá ${r.n},
+
+Conheci o trabalho da ${r.o} ${r.ic}.
+
+Em nove anos de monitoria, avaliação e aprendizagem em programas humanitários e de desenvolvimento, ouvi muitas vezes as mesmas coisas: o dinheiro acaba antes do próximo pagamento, as pessoas não sabem onde foi parar, e o dinheiro da casa mistura-se com o do negócio. Por isso criei o Hileon Budget Tracker.
+
+É uma aplicação Android que funciona offline, em 14 línguas e mais de 150 moedas. Ajuda a planear cada valor recebido, a registar gastos em segundos ou a partir de uma foto do recibo, e a separar o dinheiro da casa do dinheiro do negócio. O essencial é gratuito, sem anúncios, e os registos ficam privados no telemóvel de cada pessoa.
+
+Pode ajudar a transformar a formação em educação financeira num hábito diário. Está no Google Play:
+${PLAY}
+
+Se for útil, partilhe-a com a sua equipa ou participantes, e responda com qualquer dúvida.
+
+Terrence Kagurabadza
+Fundador, Hileon
+support@hileonapp.com | hileonapp.com
+
+P.S. Se não for relevante para si, responda apenas "não, obrigado" e não voltarei a escrever.`,
+ e2:r=>`Olá ${r.n},
+
+Volto a escrever com um guia curto que pode passar à sua equipa:
+${GUIDE}
+
+Os três problemas que o Hileon resolve com mais frequência:
+- O dinheiro acaba cedo demais: um orçamento mensal, um limite por categoria e um aviso enquanto ainda há tempo para ajustar.
+- Não há registo de onde foi parar: gastos registados em segundos, ou a partir de uma foto do recibo, com gráficos claros por mês.
+- Dinheiro da casa misturado com o do negócio: livros Pessoal e Negócio separados, com a margem de lucro sempre visível.
+
+Os novos utilizadores têm todas as funções grátis nos primeiros 7 dias:
+${PLAY}
+
+Se este não for o momento certo, a quem da sua equipa devo enviar esta mensagem?
+
+Terrence`,
+ e3:r=>`Olá ${r.n},
+
+Esta é a minha última mensagem.
+
+Se o Hileon puder ajudar os participantes da ${r.o} a acompanhar o seu dinheiro, a aplicação é gratuita para instalar e partilhar:
+${PLAY}
+
+Para qualquer dúvida, basta responder. Obrigado pelo trabalho que fazem ${r.ic}.
+
+Terrence
+support@hileonapp.com`},
+es:{name:"Spanish",subj:"Cuando el dinero se acaba antes que el mes",
+ e1:r=>`Hola ${r.n}:
+
+Conocí el trabajo de ${r.o} ${r.ic}.
+
+En nueve años de monitoreo, evaluación y aprendizaje en programas humanitarios y de desarrollo, escuché muchas veces lo mismo: el dinero se acaba antes del próximo pago, la gente no sabe en qué se fue, y el dinero del hogar se mezcla con el del negocio. Por eso creé Hileon Budget Tracker.
+
+Es una aplicación Android que funciona sin conexión, en 14 idiomas y más de 150 monedas. Ayuda a planificar cada monto recibido, a registrar gastos en segundos o desde una foto del recibo, y a separar el dinero del hogar del dinero del negocio. Lo esencial es gratis, sin anuncios, y los registros quedan privados en el teléfono de cada persona.
+
+Puede ayudar a convertir la formación en educación financiera en un hábito diario. Está en Google Play:
+${PLAY}
+
+Si le resulta útil, compártala con su equipo o participantes, y responda con cualquier pregunta.
+
+Terrence Kagurabadza
+Fundador, Hileon
+support@hileonapp.com | hileonapp.com
+
+P.D. Si esto no es relevante para usted, responda "no, gracias" y no volveré a escribirle.`,
+ e2:r=>`Hola ${r.n}:
+
+Le escribo de nuevo con una guía breve que puede compartir con su equipo:
+${GUIDE}
+
+Los tres problemas que Hileon resuelve con más frecuencia:
+- El dinero se acaba antes de tiempo: un presupuesto mensual, un límite por categoría y un aviso cuando todavía hay tiempo de ajustar.
+- No hay registro de en qué se fue: gastos anotados en segundos, o desde una foto del recibo, con gráficos claros por mes.
+- Dinero del hogar mezclado con el del negocio: libros Personal y Negocio separados, con el margen de ganancia siempre a la vista.
+
+Los nuevos usuarios tienen todas las funciones gratis durante los primeros 7 días:
+${PLAY}
+
+Si no es el momento adecuado, ¿a quién de su equipo debería enviarle este mensaje?
+
+Terrence`,
+ e3:r=>`Hola ${r.n}:
+
+Este es mi último mensaje.
+
+Si Hileon puede ayudar a los participantes de ${r.o} a llevar el control de su dinero, la aplicación es gratis para instalar y compartir:
+${PLAY}
+
+Para cualquier pregunta, solo responda a este correo. Gracias por el trabajo que realizan ${r.ic}.
+
+Terrence
+support@hileonapp.com`}
+};
+
+/* ---- dates and steps ---- */
+const pad=n=>String(n).padStart(2,"0");
+const dayStr=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const TODAY=dayStr(new Date());
+function addDays(s,n){const [y,m,d]=s.split("-").map(Number);return dayStr(new Date(y,m-1,d+n));}
+function nice(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(undefined,{day:"numeric",month:"short"});}
+const STEP=[null,"First email","Follow-up","Last note"];
+
+/* what comes next for a prospect: {n:1|2|3, due:"YYYY-MM-DD"} or null when finished/stopped */
+function next(st){
+  if(st.replied||st.skip) return null;
+  if(!st.s1) return {n:1,due:TODAY};
+  if(!st.s2) return {n:2,due:addDays(st.s1,3)};
+  if(!st.s3){const a=addDays(st.s1,9),b=addDays(st.s2,3);return {n:3,due:a>b?a:b};}
+  return null;
+}
+function body(r,n){return T[r.l]["e"+n](r);}
+
+/* ---- state ---- */
+let S={}, ready=false, tab="today", db=null, local=false, lastUndo=null;
+const LS="hileon-desk-status";
+const prefs=(()=>{try{return JSON.parse(localStorage.getItem("hileon-desk-prefs"))||{}}catch(e){return {}}})();
+function savePrefs(){try{localStorage.setItem("hileon-desk-prefs",JSON.stringify(prefs))}catch(e){}}
+const st=id=>S[id]||{};
+const chains={};
+function save(id,val){
+  S[id]=val; render();
+  if(local){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){} return;}
+  if(!db) return;
+  const ref=db.doc("status/"+id);
+  chains[id]=(chains[id]||Promise.resolve()).then(()=>ref.set(val)).catch(e=>{
+    note("That change could not be saved"+(e&&e.code==="unavailable"?" (no connection). Try again in a moment.":". Reload the page and try again."));
+  });
+}
+function note(t){const n=document.getElementById("note");n.textContent=t;n.hidden=!t;}
+
+/* ---- render ---- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function composeUrl(r,n){
+  const su=encodeURIComponent(T[r.l].subj), bo=encodeURIComponent(body(r,n)), to=encodeURIComponent(r.e);
+  return (prefs.mail==="outlook")
+    ? `https://outlook.live.com/mail/0/deeplink/compose?to=${to}&subject=${su}&body=${bo}`
+    : `https://mail.google.com/mail/u/${prefs.acct||0}/?view=cm&fs=1&to=${to}&su=${su}&body=${bo}`;
+}
+function rowHtml(r,mode){
+  const s=st(r.id), nx=next(s);
+  const meta=`${esc(r.c)} · Wave ${r.w} · ${T[r.l].name}`;
+  let chip, acts="", prev="";
+  if(s.replied) chip="Replied";
+  else if(s.skip) chip="Skipped";
+  else if(!nx) chip="Finished";
+  else chip=STEP[nx.n]+(nx.n>1&&nx.due>TODAY?" due "+nice(nx.due):"");
+  if(nx && (mode==="today"||nx.due<=TODAY)){
+    if(nx.n===1){
+      acts+=`<a class="btn go" target="_blank" rel="noopener" href="${esc(composeUrl(r,1))}">Open in ${prefs.mail==="outlook"?"Outlook":"Gmail"}</a>`;
+      acts+=`<button class="btn" data-a="copy" data-id="${r.id}" data-n="1">Copy text</button>`;
+    }else{
+      if(prefs.mail!=="outlook") acts+=`<a class="btn go" target="_blank" rel="noopener" href="https://mail.google.com/mail/u/${prefs.acct||0}/#search/${encodeURIComponent("to:"+r.e)}">Find the thread</a>`;
+      acts+=`<button class="btn${prefs.mail==="outlook"?" go":""}" data-a="copy" data-id="${r.id}" data-n="${nx.n}">Copy reply text</button>`;
+    }
+    acts+=`<button class="btn done" data-a="sent" data-id="${r.id}" data-n="${nx.n}">Mark sent</button>`;
+    prev=`<details><summary>${nx.n===1?"Read the email":"Read the reply"}${nx.n>1?" (send it as a reply in the same thread)":""}</summary><pre>${nx.n===1?"Subject: "+esc(T[r.l].subj)+"\n\n":""}${esc(body(r,nx.n))}</pre></details>`;
+  }
+  if(s.s1&&!s.replied&&!s.skip) acts+=`<button class="link" data-a="replied" data-id="${r.id}">They replied</button>`;
+  if(!s.replied) acts+=`<button class="link" data-a="skip" data-id="${r.id}">${s.skip?"Put back":"Skip (bounced or wrong)"}</button>`;
+  if(s.replied) acts+=`<button class="link" data-a="replied" data-id="${r.id}">Undo replied</button>`;
+  if(mode==="all"&&(s.s1)&&!s.replied&&!s.skip) acts+=`<button class="link" data-a="back" data-id="${r.id}">Undo last sent</button>`;
+  const hist=[s.s1&&"first email "+nice(s.s1),s.s2&&"follow-up "+nice(s.s2),s.s3&&"last note "+nice(s.s3)].filter(Boolean).join(", ");
+  return `<div class="row${(s.replied||s.skip||(!nx&&s.s3))?" off":""}">
+    <div class="top"><div><div class="org">${esc(r.o)}</div><div class="meta">${meta}</div><div class="addr">${esc(r.e)}</div></div><span class="step">${chip}</span></div>
+    ${hist?`<div class="meta" style="margin-top:6px">Sent: ${hist}</div>`:""}
+    <div class="acts">${acts}</div>${prev}</div>`;
+}
+function render(){
+  const cap=+(prefs.cap||30);
+  let sentToday=0,c={none:0,prog:0,fin:0,rep:0,skip:0};
+  const due=[],fresh=[];
+  for(const r of P){
+    const s=st(r.id);
+    for(const k of ["s1","s2","s3"]) if(s[k]===TODAY) sentToday++;
+    if(s.replied) c.rep++; else if(s.skip) c.skip++; else if(!s.s1) c.none++; else if(s.s3) c.fin++; else c.prog++;
+    const nx=next(s); if(!nx) continue;
+    if(nx.n===1) fresh.push(r); else if(nx.due<=TODAY) due.push([nx.due,r]);
+  }
+  document.getElementById("nToday").textContent=sentToday;
+  document.getElementById("capTxt").textContent=`of ${cap} sent today`;
+  document.getElementById("bar").style.width=Math.min(100,100*sentToday/cap)+"%";
+  document.getElementById("counts").innerHTML=`<span><b>${c.none}</b>not started</span><span><b>${c.prog}</b>in progress</span><span><b>${c.fin}</b>finished</span><span><b>${c.rep}</b>replied</span><span><b>${c.skip}</b>skipped</span>`;
+  document.getElementById("acctL").hidden=prefs.mail==="outlook";
+  const list=document.getElementById("list");
+  if(!ready){return;}
+  let h="";
+  if(tab==="today"){
+    due.sort((a,b)=>a[0]<b[0]?-1:1);
+    const left=Math.max(0,cap-sentToday);
+    const fu=due.slice(0,left).map(x=>x[1]);
+    const nf=fresh.slice(0,Math.max(0,left-fu.length));
+    if(fu.length) h+=`<div class="sec">Follow-ups due<small>reply in the same thread</small></div>`+fu.map(r=>rowHtml(r,"today")).join("");
+    if(nf.length) h+=`<div class="sec">First emails<small>Wave ${nf[0].w}${nf[nf.length-1].w!==nf[0].w?" to "+nf[nf.length-1].w:""}, best fits first</small></div>`+nf.map(r=>rowHtml(r,"today")).join("");
+    if(!h){
+      if(left===0&&(due.length||fresh.length)) h=`<div class="empty"><b>Done for today</b>${due.length+fresh.length} more are waiting. Come back tomorrow, or raise the daily limit at the top.</div>`;
+      else if(c.prog) h=`<div class="empty"><b>Nothing due today</b>The next follow-ups will appear here when their day comes.</div>`;
+      else h=`<div class="empty"><b>All done</b>Every organisation on the list has been contacted.</div>`;
+    }
+  }else{
+    const q=document.getElementById("q").value.trim().toLowerCase();
+    const rows=P.filter(r=>!q||(r.o+" "+r.c+" "+r.e).toLowerCase().includes(q));
+    h=rows.length?rows.map(r=>rowHtml(r,"all")).join(""):`<div class="empty"><b>No match</b>Try a shorter search.</div>`;
+  }
+  list.innerHTML=h;
+}
+
+/* ---- actions ---- */
+let toastTimer;
+function toast(t,undo){
+  lastUndo=undo||null;
+  document.getElementById("toastT").textContent=t;
+  document.getElementById("undo").hidden=!undo;
+  document.getElementById("toast").hidden=false;
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>{document.getElementById("toast").hidden=true},7000);
+}
+document.getElementById("undo").onclick=()=>{if(lastUndo){lastUndo();lastUndo=null;document.getElementById("toast").hidden=true;}};
+document.getElementById("list").addEventListener("click",ev=>{
+  const b=ev.target.closest("[data-a]"); if(!b) return;
+  const id=b.dataset.id, r=P.find(x=>x.id===id), old={...st(id)}, a=b.dataset.a;
+  if(a==="copy"){
+    const n=+b.dataset.n, txt=body(r,n);
+    const ok=()=>toast(n===1?"Email text copied":"Reply text copied. Paste it as a reply in the same thread.");
+    const fail=()=>{const d=b.closest(".row").querySelector("details");if(d){d.open=true;const pre=d.querySelector("pre");const rg=document.createRange();rg.selectNodeContents(pre);const sel=getSelection();sel.removeAllRanges();sel.addRange(rg);}toast("Copying is blocked here. The text is selected below, copy it from there.");};
+    try{navigator.clipboard.writeText(txt).then(ok,fail)}catch(e){fail()}
+    return;
+  }
+  if(a==="sent"){const n=+b.dataset.n; save(id,{...old,["s"+n]:TODAY}); toast(`${STEP[n]} to ${r.o} marked sent`,()=>save(id,old));}
+  if(a==="replied"){save(id,{...old,replied:!old.replied}); toast(old.replied?"Put back in the sequence":`${r.o} replied. No more emails will be queued.`,()=>save(id,old));}
+  if(a==="skip"){save(id,{...old,skip:!old.skip}); toast(old.skip?"Put back on the list":`${r.o} skipped`,()=>save(id,old));}
+  if(a==="back"){const v={...old}; for(const k of ["s3","s2","s1"]) if(v[k]){delete v[k];break;} save(id,v); toast("Last sent mark removed",()=>save(id,old));}
+});
+for(const [id,key] of [["cap","cap"],["mail","mail"],["acct","acct"]]){
+  const el=document.getElementById(id); if(prefs[key]!=null) el.value=prefs[key];
+  el.onchange=()=>{prefs[key]=el.value;savePrefs();render();};
+}
+function setTab(t){tab=t;document.getElementById("tToday").setAttribute("aria-selected",t==="today");document.getElementById("tAll").setAttribute("aria-selected",t==="all");document.getElementById("q").hidden=t!=="all";render();}
+document.getElementById("tToday").onclick=()=>setTab("today");
+document.getElementById("tAll").onclick=()=>setTab("all");
+document.getElementById("q").oninput=render;
+
+/* ---- storage: the artifact's database, or this browser if that is not available ---- */
+function useLocal(msg){
+  local=true; try{S=JSON.parse(localStorage.getItem(LS))||{}}catch(e){S={}}
+  ready=true; note(msg); render();
+}
+async function start(){
+  render();
+  let d=null; try{d=await window.claude?.use?.("db")}catch(e){}
+  if(!d){useLocal("Progress is saved in this browser on this device only. It will not sync to other devices. Do not clear this browser's site data if you want to keep your campaign history.");return;}
+  db=d;
+  const slow=setTimeout(()=>{if(!ready) note("Your saved progress can't be reached yet. Don't mark anything until it loads.");},10000);
+  db.collection("status").onSnapshot(snap=>{
+    const m={}; for(const doc of snap.docs) m[doc.id]={...doc.data()};
+    S=m; ready=true;
+    if(!snap.metadata.fromCache){clearTimeout(slow); note("");}
+    render();
+  },()=>{clearTimeout(slow); if(!ready) useLocal("Your saved progress could not be loaded. Changes are now being kept in this browser on this device only. Reload to try again."); else note("Lost contact with your saved progress. Reload the page before marking anything else.");});
+}
+start();
+</script>
+
+</body></html>
